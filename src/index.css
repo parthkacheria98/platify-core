@@ -1,0 +1,292 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
+All colors MUST be HSL.
+*/
+
+@layer base {
+  :root {
+    /* Light Mode - Pastel Premium Palette */
+    --background: 0 0% 100%;
+    --foreground: 220 15% 20%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 220 15% 20%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 220 15% 20%;
+
+    /* Primary: Rich Lavender */
+    --primary: 270 60% 55%;
+    --primary-foreground: 0 0% 100%;
+    --primary-hover: 270 65% 50%;
+    --primary-glow: 270 70% 65%;
+
+    /* Secondary: Deep Mint */
+    --secondary: 150 45% 50%;
+    --secondary-foreground: 0 0% 100%;
+    --secondary-hover: 150 50% 45%;
+
+    /* Muted: Soft Gray */
+    --muted: 220 15% 95%;
+    --muted-foreground: 220 10% 40%;
+
+    /* Accent: Vibrant Coral */
+    --accent: 20 75% 60%;
+    --accent-foreground: 0 0% 100%;
+    --accent-hover: 20 80% 55%;
+
+    /* Tertiary: Sky Blue */
+    --tertiary: 200 60% 55%;
+    --tertiary-foreground: 0 0% 100%;
+    --tertiary-hover: 200 65% 50%;
+
+    --destructive: 0 70% 55%;
+    --destructive-foreground: 0 0% 100%;
+
+    /* Borders */
+    --border: 220 15% 88%;
+    --input: 220 15% 88%;
+    --ring: 270 60% 55%;
+
+    --radius: 0.5rem;
+
+    /* Premium transitions & effects */
+    --transition-smooth: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    --transition-fast: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    
+    /* Premium shadows with glow */
+    --shadow-soft: 0 4px 20px -4px hsl(var(--primary) / 0.15);
+    --shadow-medium: 0 8px 30px -6px hsl(var(--primary) / 0.2);
+    --shadow-glow: 0 0 30px hsl(var(--primary-glow) / 0.3);
+  }
+
+  .dark {
+    /* Dark Mode - Rich Pastel Palette */
+    --background: 220 20% 8%;
+    --foreground: 0 0% 95%;
+
+    --card: 220 20% 12%;
+    --card-foreground: 0 0% 95%;
+
+    --popover: 220 20% 12%;
+    --popover-foreground: 0 0% 95%;
+
+    /* Primary: Soft Lavender for dark */
+    --primary: 270 60% 65%;
+    --primary-foreground: 220 20% 8%;
+    --primary-hover: 270 65% 70%;
+    --primary-glow: 270 70% 75%;
+
+    /* Secondary: Mint for dark */
+    --secondary: 150 45% 60%;
+    --secondary-foreground: 220 20% 8%;
+    --secondary-hover: 150 50% 65%;
+
+    /* Muted: Dark gray */
+    --muted: 220 20% 15%;
+    --muted-foreground: 220 10% 60%;
+
+    /* Accent: Coral for dark */
+    --accent: 20 75% 65%;
+    --accent-foreground: 220 20% 8%;
+    --accent-hover: 20 80% 70%;
+
+    /* Tertiary: Sky Blue for dark */
+    --tertiary: 200 60% 65%;
+    --tertiary-foreground: 220 20% 8%;
+    --tertiary-hover: 200 65% 70%;
+
+    --destructive: 0 70% 60%;
+    --destructive-foreground: 0 0% 100%;
+
+    /* Borders */
+    --border: 220 20% 20%;
+    --input: 220 20% 20%;
+    --ring: 270 60% 65%;
+
+    /* Premium shadows with glow for dark mode */
+    --shadow-soft: 0 4px 20px -4px hsl(var(--primary) / 0.25);
+    --shadow-medium: 0 8px 30px -6px hsl(var(--primary) / 0.3);
+    --shadow-glow: 0 0 40px hsl(var(--primary-glow) / 0.4);
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground antialiased;
+  }
+
+  /* Premium typography scale */
+  h1 {
+    @apply text-5xl md:text-7xl lg:text-8xl font-light tracking-tight leading-[0.95];
+  }
+
+  h2 {
+    @apply text-4xl md:text-5xl lg:text-6xl font-light tracking-tight leading-tight;
+  }
+
+  h3 {
+    @apply text-2xl md:text-3xl lg:text-4xl font-light tracking-tight;
+  }
+
+  h4 {
+    @apply text-xl md:text-2xl font-normal tracking-tight;
+  }
+
+  p {
+    @apply text-base md:text-lg leading-relaxed;
+  }
+
+  /* Smooth scroll behavior */
+  html {
+    scroll-behavior: smooth;
+  }
+
+  /* Selection color */
+  ::selection {
+    @apply bg-primary text-primary-foreground;
+  }
+}
+
+@layer utilities {
+  /* Premium animations */
+  .animate-fade-in-up {
+    animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    opacity: 0;
+  }
+
+  .animate-fade-in {
+    animation: fadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    opacity: 0;
+  }
+
+  .animate-slide-in-left {
+    animation: slideInLeft 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    opacity: 0;
+  }
+
+  .animate-slide-in-right {
+    animation: slideInRight 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    opacity: 0;
+  }
+
+  .animate-hero {
+    animation: heroFloat 3s ease-in-out infinite;
+  }
+
+  .animate-glow {
+    animation: glowPulse 2s ease-in-out infinite;
+  }
+
+  .animate-typing {
+    animation: typing 3.5s steps(40, end), blink 0.75s step-end infinite;
+  }
+
+  /* Stagger delays for sequential animations */
+  .delay-100 {
+    animation-delay: 0.1s;
+  }
+
+  .delay-200 {
+    animation-delay: 0.2s;
+  }
+
+  .delay-300 {
+    animation-delay: 0.3s;
+  }
+
+  .delay-400 {
+    animation-delay: 0.4s;
+  }
+
+  .delay-500 {
+    animation-delay: 0.5s;
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes heroFloat {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes glowPulse {
+  0%, 100% {
+    box-shadow: 0 0 20px hsl(var(--primary) / 0.3);
+  }
+  50% {
+    box-shadow: 0 0 40px hsl(var(--primary) / 0.5);
+  }
+}
+
+@keyframes typing {
+  from { width: 0 }
+  to { width: 100% }
+}
+
+@keyframes blink {
+  from, to { border-color: transparent }
+  50% { border-color: hsl(var(--primary)) }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+  }
+}
