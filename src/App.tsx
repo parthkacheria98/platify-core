@@ -13,7 +13,9 @@ import Admin from "./pages/Admin";
 import BlogAdmin from "./pages/admin/BlogAdmin";
 import CaseStudiesAdmin from "./pages/admin/CaseStudiesAdmin";
 import VideosAdmin from "./pages/admin/VideosAdmin";
+import AdminLogin from "./pages/AdminLogin";
 import NotFound from "./pages/NotFound";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 const queryClient = new QueryClient();
 
@@ -30,10 +32,11 @@ const App = () => (
           <Route path="/contact" element={<Contact />} />
           <Route path="/blog" element={<Blog />} />
           <Route path="/case-studies" element={<CaseStudies />} />
-          <Route path="/admin" element={<Admin />} />
-          <Route path="/admin/blog" element={<BlogAdmin />} />
-          <Route path="/admin/case-studies" element={<CaseStudiesAdmin />} />
-          <Route path="/admin/videos" element={<VideosAdmin />} />
+          <Route path="/admin-login" element={<AdminLogin />} />
+          <Route path="/admin" element={<ProtectedRoute><Admin /></ProtectedRoute>} />
+          <Route path="/admin/blog" element={<ProtectedRoute><BlogAdmin /></ProtectedRoute>} />
+          <Route path="/admin/case-studies" element={<ProtectedRoute><CaseStudiesAdmin /></ProtectedRoute>} />
+          <Route path="/admin/videos" element={<ProtectedRoute><VideosAdmin /></ProtectedRoute>} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
