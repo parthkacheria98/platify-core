@@ -13,6 +13,7 @@ import Admin from "./pages/Admin";
 import BlogAdmin from "./pages/admin/BlogAdmin";
 import CaseStudiesAdmin from "./pages/admin/CaseStudiesAdmin";
 import VideosAdmin from "./pages/admin/VideosAdmin";
+import OutcomesAdmin from "./pages/admin/OutcomesAdmin";
 import AdminLogin from "./pages/AdminLogin";
 import NotFound from "./pages/NotFound";
 import ProtectedRoute from "./components/ProtectedRoute";
@@ -37,6 +38,7 @@ const App = () => (
           <Route path="/admin/blog" element={<ProtectedRoute><BlogAdmin /></ProtectedRoute>} />
           <Route path="/admin/case-studies" element={<ProtectedRoute><CaseStudiesAdmin /></ProtectedRoute>} />
           <Route path="/admin/videos" element={<ProtectedRoute><VideosAdmin /></ProtectedRoute>} />
+          <Route path="/admin/outcomes" element={<ProtectedRoute><OutcomesAdmin /></ProtectedRoute>} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>

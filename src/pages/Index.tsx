@@ -10,13 +10,22 @@ const Index = () => {
   const opacity = useTransform(scrollYProgress, [0, 0.2], [1, 0]);
   const scale = useTransform(scrollYProgress, [0, 0.2], [1, 0.95]);
   
-  const outcomes = [
+  const [outcomes, setOutcomes] = useState([
     "Operational clarity through unified systems",
     "Faster decision-making with real-time data",
     "Fewer errors via automated workflows",
     "One source of truth for your entire team",
     "Tools that perfectly match your workflow",
-  ];
+  ]);
+
+  useEffect(() => {
+    // Load outcomes from localStorage
+    const saved = localStorage.getItem("signatureOutcomes");
+    if (saved) {
+      const parsedOutcomes = JSON.parse(saved);
+      setOutcomes(parsedOutcomes.map((o: any) => o.text));
+    }
+  }, []);
 
   const [currentOutcome, setCurrentOutcome] = useState(0);
   const [isDeleting, setIsDeleting] = useState(false);
@@ -165,38 +174,72 @@ const Index = () => {
           ))}
         </div>
         
-        {/* Spinning cogs */}
-        {[...Array(5)].map((_, i) => (
-          <motion.div
-            key={`cog-${i}`}
-            className="absolute rounded-full border-2 border-accent/30"
-            style={{
-              width: `${60 + i * 40}px`,
-              height: `${60 + i * 40}px`,
-              top: `${15 + i * 15}%`,
-              left: `${5 + i * 18}%`,
-            }}
-            animate={{
-              rotate: i % 2 === 0 ? 360 : -360,
-            }}
-            transition={{
-              duration: 10 + i * 3,
-              repeat: Infinity,
-              ease: "linear"
-            }}
-          >
-            {[...Array(8)].map((_, j) => (
-              <div
-                key={j}
-                className="absolute w-1 h-3 bg-accent/40 rounded-full"
+        {/* Spinning proper gears - positioned to avoid text */}
+        {[
+          { size: 80, top: "5%", left: "3%", teeth: 12, speed: 8 },
+          { size: 120, top: "60%", left: "85%", teeth: 16, speed: 6 },
+          { size: 100, top: "75%", left: "8%", teeth: 14, speed: 7 },
+        ].map((gear, i) => (
+          <div key={`gear-group-${i}`} className="absolute" style={{ top: gear.top, left: gear.left }}>
+            {/* Main gear */}
+            <motion.div
+              className="relative"
+              style={{
+                width: `${gear.size}px`,
+                height: `${gear.size}px`,
+              }}
+              animate={{
+                rotate: i % 2 === 0 ? 360 : -360,
+              }}
+              transition={{
+                duration: gear.speed,
+                repeat: Infinity,
+                ease: "linear"
+              }}
+            >
+              {/* Gear center circle */}
+              <div 
+                className="absolute inset-0 rounded-full border-4 border-primary/40 bg-background/20"
                 style={{
-                  top: '50%',
+                  width: `${gear.size * 0.6}px`,
+                  height: `${gear.size * 0.6}px`,
                   left: '50%',
-                  transform: `translate(-50%, -50%) rotate(${j * 45}deg) translateY(-${30 + i * 20}px)`,
+                  top: '50%',
+                  transform: 'translate(-50%, -50%)'
                 }}
               />
-            ))}
-          </motion.div>
+              
+              {/* Gear teeth */}
+              {[...Array(gear.teeth)].map((_, j) => (
+                <div
+                  key={j}
+                  className="absolute bg-primary/50"
+                  style={{
+                    width: `${gear.size * 0.15}px`,
+                    height: `${gear.size * 0.3}px`,
+                    left: '50%',
+                    top: '50%',
+                    transform: `translate(-50%, -50%) rotate(${j * (360 / gear.teeth)}deg) translateY(-${gear.size * 0.5}px)`,
+                    borderRadius: '3px',
+                    boxShadow: '0 0 8px hsl(var(--primary)/0.5)',
+                  }}
+                />
+              ))}
+            </motion.div>
+            
+            {/* Connection line to next gear (only for first two) */}
+            {i < 2 && (
+              <div 
+                className="absolute border-t-2 border-dashed border-accent/30"
+                style={{
+                  width: i === 0 ? '82%' : '78%',
+                  left: i === 0 ? '100%' : '-78%',
+                  top: '50%',
+                  transformOrigin: 'left center',
+                }}
+              />
+            )}
+          </div>
         ))}
 
         <div className="max-w-7xl mx-auto relative z-10">
@@ -289,14 +332,44 @@ const Index = () => {
             {["Spreadsheets", "Notion", "WhatsApp", "Email", "Zapier", "Forms", "Manual Steps", "Disconnected Tools"].map((tool, i) => (
               <motion.div
                 key={tool}
-                initial={{ opacity: 0, scale: 0.9 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.4, delay: i * 0.05 }}
-                whileHover={{ scale: 1.05 }}
-                className="p-4 bg-muted/60 backdrop-blur-sm rounded-lg border border-border/30 text-center"
+                initial={{ opacity: 0, x: -50 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true, margin: "-100px" }}
+                transition={{ 
+                  duration: 0.3, 
+                  delay: i * 0.15,
+                  ease: "easeOut"
+                }}
+                className="relative p-4 bg-muted/60 backdrop-blur-sm rounded-lg border border-border/30 text-center overflow-hidden"
               >
-                <span className="text-muted-foreground line-through">{tool}</span>
+                <motion.span 
+                  className="relative z-10 inline-block"
+                  initial={{ opacity: 1 }}
+                  whileInView={{ opacity: 0.4 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.2, delay: i * 0.15 + 0.3 }}
+                >
+                  {tool}
+                </motion.span>
+                
+                {/* Violent strike-through line */}
+                <motion.div
+                  className="absolute inset-0 flex items-center justify-center"
+                  initial={{ scaleX: 0, rotate: -8 }}
+                  whileInView={{ scaleX: 1, rotate: -8 }}
+                  viewport={{ once: true }}
+                  transition={{ 
+                    duration: 0.4, 
+                    delay: i * 0.15 + 0.3,
+                    ease: [0.68, -0.55, 0.265, 1.55]
+                  }}
+                >
+                  <div className="w-full h-1 bg-destructive shadow-[0_0_10px_hsl(var(--destructive))]" 
+                    style={{
+                      transformOrigin: 'center',
+                    }}
+                  />
+                </motion.div>
               </motion.div>
             ))}
           </div>
@@ -342,8 +415,26 @@ const Index = () => {
       </section>
 
       {/* Signature Outcomes */}
-      <section className="py-24 md:py-32 px-6 lg:px-12 border-t border-border/50">
-        <div className="max-w-7xl mx-auto">
+      <section className="relative py-24 md:py-32 px-6 lg:px-12 border-t border-border/50 overflow-hidden">
+        {/* Animated gradient background */}
+        <motion.div 
+          className="absolute inset-0 opacity-30"
+          animate={{
+            background: [
+              'radial-gradient(circle at 20% 50%, hsl(var(--primary)/0.2) 0%, transparent 50%)',
+              'radial-gradient(circle at 80% 50%, hsl(var(--secondary)/0.2) 0%, transparent 50%)',
+              'radial-gradient(circle at 50% 80%, hsl(var(--accent)/0.2) 0%, transparent 50%)',
+              'radial-gradient(circle at 20% 50%, hsl(var(--primary)/0.2) 0%, transparent 50%)',
+            ]
+          }}
+          transition={{
+            duration: 10,
+            repeat: Infinity,
+            ease: "linear"
+          }}
+        />
+        
+        <div className="max-w-7xl mx-auto relative z-10">
           <motion.h2
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -356,17 +447,34 @@ const Index = () => {
           
           <div className="flex justify-center">
             <motion.div
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
+              initial={{ opacity: 0, scale: 0.95 }}
+              whileInView={{ opacity: 1, scale: 1 }}
               viewport={{ once: true }}
               transition={{ duration: 0.8 }}
-              className="text-3xl md:text-5xl font-light min-h-[120px] flex items-center"
+              className="relative text-3xl md:text-5xl font-light min-h-[120px] flex items-center"
             >
-              <span className="text-primary">{text}</span>
+              {/* Glowing background effect */}
+              <motion.div
+                className="absolute inset-0 blur-3xl opacity-50"
+                animate={{
+                  background: [
+                    'radial-gradient(ellipse, hsl(var(--primary)/0.4) 0%, transparent 70%)',
+                    'radial-gradient(ellipse, hsl(var(--secondary)/0.4) 0%, transparent 70%)',
+                    'radial-gradient(ellipse, hsl(var(--primary)/0.4) 0%, transparent 70%)',
+                  ]
+                }}
+                transition={{
+                  duration: 4,
+                  repeat: Infinity,
+                  ease: "easeInOut"
+                }}
+              />
+              
+              <span className="text-primary relative z-10 px-4">{text}</span>
               <motion.span
                 animate={{ opacity: [1, 0] }}
                 transition={{ duration: 0.8, repeat: Infinity, repeatType: "reverse" }}
-                className="border-r-2 border-primary ml-1"
+                className="border-r-2 border-primary ml-1 relative z-10"
               />
             </motion.div>
           </div>

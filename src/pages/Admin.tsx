@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { FileText, Briefcase, Video, Users, Settings } from "lucide-react";
+import { FileText, Briefcase, Video, Users, Target } from "lucide-react";
 
 const Admin = () => {
   const sections = [
@@ -26,11 +26,11 @@ const Admin = () => {
       count: 6,
     },
     {
-      title: "Testimonials",
-      description: "Manage client testimonials",
-      icon: Users,
-      link: "/admin/testimonials",
-      count: 0,
+      title: "Signature Outcomes",
+      description: "Manage homepage outcomes",
+      icon: Target,
+      link: "/admin/outcomes",
+      count: JSON.parse(localStorage.getItem("signatureOutcomes") || "[]").length || 5,
     },
   ];
 
@@ -90,7 +90,7 @@ const Admin = () => {
           <div className="bg-background border border-border/50 p-8">
             <h3 className="text-xl font-light mb-6">Quick Actions</h3>
             
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
               <Link to="/admin/blog">
                 <Button variant="outline" className="w-full justify-start">
                   <FileText className="w-4 h-4 mr-2" />
@@ -109,6 +109,13 @@ const Admin = () => {
                 <Button variant="outline" className="w-full justify-start">
                   <Video className="w-4 h-4 mr-2" />
                   New Video
+                </Button>
+              </Link>
+              
+              <Link to="/admin/outcomes">
+                <Button variant="outline" className="w-full justify-start">
+                  <Target className="w-4 h-4 mr-2" />
+                  New Outcome
                 </Button>
               </Link>
             </div>
