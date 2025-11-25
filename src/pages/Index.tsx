@@ -3,8 +3,13 @@ import { Button } from "@/components/ui/button";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import { useState, useEffect } from "react";
+import { motion, useScroll, useTransform } from "framer-motion";
 
 const Index = () => {
+  const { scrollYProgress } = useScroll();
+  const opacity = useTransform(scrollYProgress, [0, 0.2], [1, 0]);
+  const scale = useTransform(scrollYProgress, [0, 0.2], [1, 0.95]);
+  
   const outcomes = [
     "Operational clarity through unified systems",
     "Faster decision-making with real-time data",
@@ -96,45 +101,124 @@ const Index = () => {
 
       {/* Hero Section */}
       <section className="relative pt-32 md:pt-48 pb-24 md:pb-32 px-6 lg:px-12 overflow-hidden">
+        {/* Animated background grid */}
+        <div className="absolute inset-0 overflow-hidden opacity-20">
+          <motion.div
+            className="absolute inset-0"
+            style={{
+              backgroundImage: `linear-gradient(hsl(var(--border)) 1px, transparent 1px), linear-gradient(90deg, hsl(var(--border)) 1px, transparent 1px)`,
+              backgroundSize: '50px 50px',
+            }}
+            animate={{
+              backgroundPosition: ['0px 0px', '50px 50px'],
+            }}
+            transition={{
+              duration: 20,
+              repeat: Infinity,
+              ease: "linear"
+            }}
+          />
+        </div>
+
         <div className="max-w-7xl mx-auto relative z-10">
-          <div className="animate-fade-in-up">
-            <h1 className="mb-8 md:mb-12 animate-hero">
-              We Build the Systems
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+            style={{ opacity, scale }}
+          >
+            <motion.h1 
+              className="mb-8 md:mb-12"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 1, delay: 0.2 }}
+            >
+              {["We", "Build", "the", "Systems"].map((word, i) => (
+                <motion.span
+                  key={i}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: i * 0.1 }}
+                  className="inline-block mr-3"
+                >
+                  {word}
+                </motion.span>
+              ))}
               <br />
-              Your Business Runs On.
-            </h1>
-          </div>
+              {["Your", "Business", "Runs", "On."].map((word, i) => (
+                <motion.span
+                  key={i}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: 0.4 + i * 0.1 }}
+                  className="inline-block mr-3"
+                >
+                  {word}
+                </motion.span>
+              ))}
+            </motion.h1>
+          </motion.div>
           
-          <div className="animate-fade-in-up delay-200">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.8 }}
+          >
             <p className="text-xl md:text-2xl text-muted-foreground max-w-3xl leading-relaxed mb-12 font-light">
               Goodbye spreadsheets, Notion pages, and stitched-together automations. We design and engineer a single, bespoke platform that mirrors your exact workflow—with the precision, clarity, and polish your business deserves.
             </p>
-          </div>
+          </motion.div>
 
-          <div className="animate-fade-in-up delay-300">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 1 }}
+          >
             <Link to="/contact">
               <Button variant="premium" size="xl" className="animate-glow">
                 Book a Private Consultation
               </Button>
             </Link>
-          </div>
+          </motion.div>
         </div>
       </section>
 
       {/* Replace Your Patchwork Tools */}
       <section className="py-24 md:py-32 px-6 lg:px-12 border-t border-border/50">
         <div className="max-w-6xl mx-auto">
-          <h2 className="mb-12 md:mb-16">Replace Your Patchwork Tools</h2>
+          <motion.h2
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+            className="mb-12 md:mb-16"
+          >
+            Replace Your Patchwork Tools
+          </motion.h2>
           
-          <p className="text-xl md:text-2xl text-muted-foreground leading-relaxed font-light mb-12">
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+            className="text-xl md:text-2xl text-muted-foreground leading-relaxed font-light mb-12"
+          >
             Your team shouldn't have to juggle Google Sheets, Notion wikis, WhatsApp threads, email chains, Zapier flows, disconnected forms, and offline steps. We unify them into one elegant platform—designed for the way you actually work.
-          </p>
+          </motion.p>
           
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
             {["Spreadsheets", "Notion", "WhatsApp", "Email", "Zapier", "Forms", "Manual Steps", "Disconnected Tools"].map((tool, i) => (
-              <div key={tool} className="animate-fade-in-up p-4 bg-muted/60 backdrop-blur-sm rounded-lg border border-border/30 text-center" style={{ animationDelay: `${i * 0.05}s` }}>
+              <motion.div
+                key={tool}
+                initial={{ opacity: 0, scale: 0.9 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.4, delay: i * 0.05 }}
+                whileHover={{ scale: 1.05 }}
+                className="p-4 bg-muted/60 backdrop-blur-sm rounded-lg border border-border/30 text-center"
+              >
                 <span className="text-muted-foreground line-through">{tool}</span>
-              </div>
+              </motion.div>
             ))}
           </div>
         </div>
@@ -143,24 +227,36 @@ const Index = () => {
       {/* What We Build */}
       <section className="py-24 md:py-32 px-6 lg:px-12 border-t border-border/50">
         <div className="max-w-7xl mx-auto">
-          <h2 className="mb-16 md:mb-24">What We Build</h2>
+          <motion.h2
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+            className="mb-16 md:mb-24"
+          >
+            What We Build
+          </motion.h2>
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-10">
             {buildTypes.map((type, index) => (
-              <div
+              <motion.div
                 key={type.name}
-                className="animate-fade-in-up group"
-                style={{ animationDelay: `${index * 0.08}s` }}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: index * 0.08 }}
+                whileHover={{ scale: 1.05, rotate: type.highlight ? 0 : 0 }}
+                className="group"
               >
                 <div className={`p-8 rounded-xl border-2 transition-all duration-500 h-full ${
                   type.highlight 
-                    ? "bg-primary text-primary-foreground border-primary hover:border-primary-hover hover:shadow-[0_0_30px_hsl(var(--primary)/0.4)] hover:scale-105" 
-                    : "bg-card border-border hover:border-primary/50 hover:shadow-[0_0_20px_hsl(var(--primary)/0.15)] hover:scale-105"
+                    ? "bg-primary text-primary-foreground border-primary hover:border-primary-hover hover:shadow-[0_0_30px_hsl(var(--primary)/0.4)]" 
+                    : "bg-card border-border hover:border-primary/50 hover:shadow-[0_0_20px_hsl(var(--primary)/0.15)]"
                 }`}>
                   <h4 className="mb-3">{type.name}</h4>
                   <p className={`text-sm leading-relaxed ${type.highlight ? "text-primary-foreground/90" : "text-muted-foreground"}`}>{type.description}</p>
                 </div>
-              </div>
+              </motion.div>
             ))}
           </div>
         </div>
@@ -169,13 +265,31 @@ const Index = () => {
       {/* Signature Outcomes */}
       <section className="py-24 md:py-32 px-6 lg:px-12 border-t border-border/50">
         <div className="max-w-7xl mx-auto">
-          <h2 className="mb-16 md:mb-24">Signature Outcomes</h2>
+          <motion.h2
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+            className="mb-16 md:mb-24"
+          >
+            Signature Outcomes
+          </motion.h2>
           
           <div className="flex justify-center">
-            <div className="text-3xl md:text-5xl font-light min-h-[120px] flex items-center">
+            <motion.div
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8 }}
+              className="text-3xl md:text-5xl font-light min-h-[120px] flex items-center"
+            >
               <span className="text-primary">{text}</span>
-              <span className="border-r-2 border-primary animate-pulse ml-1"></span>
-            </div>
+              <motion.span
+                animate={{ opacity: [1, 0] }}
+                transition={{ duration: 0.8, repeat: Infinity, repeatType: "reverse" }}
+                className="border-r-2 border-primary ml-1"
+              />
+            </motion.div>
           </div>
         </div>
       </section>
@@ -183,20 +297,32 @@ const Index = () => {
       {/* Industries */}
       <section className="py-24 md:py-32 px-6 lg:px-12 border-t border-border/50">
         <div className="max-w-7xl mx-auto">
-          <h2 className="mb-16 md:mb-24">Industries We Build For</h2>
+          <motion.h2
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+            className="mb-16 md:mb-24"
+          >
+            Industries We Build For
+          </motion.h2>
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-12">
             {industries.map((industry, index) => (
-              <div
+              <motion.div
                 key={industry.name}
-                className="animate-fade-in-up group"
-                style={{ animationDelay: `${index * 0.1}s` }}
+                initial={{ opacity: 0, x: index % 2 === 0 ? -30 : 30 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6, delay: index * 0.1 }}
+                whileHover={{ scale: 1.02, y: -5 }}
+                className="group"
               >
-                <div className="bg-card border-2 border-border p-8 md:p-10 rounded-xl hover:border-secondary hover:shadow-[0_0_30px_hsl(var(--secondary)/0.3)] transition-all duration-500 group-hover:scale-105">
+                <div className="bg-card border-2 border-border p-8 md:p-10 rounded-xl hover:border-secondary hover:shadow-[0_0_30px_hsl(var(--secondary)/0.3)] transition-all duration-500">
                   <h3 className="mb-4 text-secondary">{industry.name}</h3>
                   <p className="text-muted-foreground leading-relaxed">{industry.description}</p>
                 </div>
-              </div>
+              </motion.div>
             ))}
           </div>
         </div>
@@ -205,14 +331,25 @@ const Index = () => {
       {/* Testimonials */}
       <section className="py-24 md:py-32 px-6 lg:px-12 border-t border-border/50">
         <div className="max-w-7xl mx-auto">
-          <h2 className="mb-16 md:mb-24 text-center">What Our Clients Say</h2>
+          <motion.h2
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+            className="mb-16 md:mb-24 text-center"
+          >
+            What Our Clients Say
+          </motion.h2>
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-10">
             {testimonials.map((testimonial, index) => (
-              <div
+              <motion.div
                 key={index}
-                className="animate-fade-in-up"
-                style={{ animationDelay: `${index * 0.15}s` }}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: index * 0.15 }}
+                whileHover={{ y: -10 }}
               >
                 <div className="bg-card border-2 border-border p-8 rounded-xl hover:border-accent hover:shadow-[0_0_25px_hsl(var(--accent)/0.25)] transition-all duration-500 h-full flex flex-col">
                   <p className="text-lg leading-relaxed mb-6 flex-grow italic text-muted-foreground">"{testimonial.quote}"</p>
@@ -222,7 +359,7 @@ const Index = () => {
                     <p className="text-xs text-accent mt-1">{testimonial.company}</p>
                   </div>
                 </div>
-              </div>
+              </motion.div>
             ))}
           </div>
         </div>
@@ -231,20 +368,36 @@ const Index = () => {
       {/* Process */}
       <section className="py-24 md:py-32 px-6 lg:px-12 border-t border-border/50">
         <div className="max-w-7xl mx-auto">
-          <h2 className="mb-16 md:mb-24">How We Work</h2>
+          <motion.h2
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+            className="mb-16 md:mb-24"
+          >
+            How We Work
+          </motion.h2>
           
           <div className="grid grid-cols-1 md:grid-cols-5 gap-8 md:gap-4">
             {["Consult", "Scope", "Design", "Build", "Refine"].map((step, index) => (
-              <div
+              <motion.div
                 key={step}
-                className="animate-fade-in-up text-center"
-                style={{ animationDelay: `${index * 0.1}s` }}
+                initial={{ opacity: 0, scale: 0.8 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: index * 0.1 }}
+                whileHover={{ scale: 1.1 }}
+                className="text-center"
               >
-                <div className="mb-4 text-6xl font-light text-muted-foreground/30">
+                <motion.div
+                  className="mb-4 text-6xl font-light text-muted-foreground/30"
+                  whileHover={{ color: "hsl(var(--primary))" }}
+                  transition={{ duration: 0.3 }}
+                >
                   {(index + 1).toString().padStart(2, "0")}
-                </div>
+                </motion.div>
                 <h4 className="font-light">{step}</h4>
-              </div>
+              </motion.div>
             ))}
           </div>
         </div>
@@ -253,17 +406,38 @@ const Index = () => {
       {/* Final CTA */}
       <section className="py-24 md:py-32 px-6 lg:px-12 border-t border-border/50">
         <div className="max-w-4xl mx-auto text-center">
-          <h2 className="mb-8 md:mb-12">Ready to Build Your System?</h2>
+          <motion.h2
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+            className="mb-8 md:mb-12"
+          >
+            Ready to Build Your System?
+          </motion.h2>
           
-          <p className="text-xl md:text-2xl text-muted-foreground mb-12 font-light">
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+            className="text-xl md:text-2xl text-muted-foreground mb-12 font-light"
+          >
             Let's discuss your workflow and design a platform that brings clarity to your operations.
-          </p>
+          </motion.p>
 
-          <Link to="/contact">
-            <Button variant="premium" size="xl">
-              Book a Private Consultation
-            </Button>
-          </Link>
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5, delay: 0.4 }}
+          >
+            <Link to="/contact">
+              <Button variant="premium" size="xl">
+                Book a Private Consultation
+              </Button>
+            </Link>
+          </motion.div>
         </div>
       </section>
 
