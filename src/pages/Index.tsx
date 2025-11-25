@@ -102,11 +102,11 @@ const Index = () => {
       {/* Hero Section */}
       <section className="relative pt-32 md:pt-48 pb-24 md:pb-32 px-6 lg:px-12 overflow-hidden">
         {/* Animated background grid */}
-        <div className="absolute inset-0 overflow-hidden opacity-20">
+        <div className="absolute inset-0 overflow-hidden opacity-40">
           <motion.div
             className="absolute inset-0"
             style={{
-              backgroundImage: `linear-gradient(hsl(var(--border)) 1px, transparent 1px), linear-gradient(90deg, hsl(var(--border)) 1px, transparent 1px)`,
+              backgroundImage: `linear-gradient(hsl(var(--border)) 1.5px, transparent 1.5px), linear-gradient(90deg, hsl(var(--border)) 1.5px, transparent 1.5px)`,
               backgroundSize: '50px 50px',
             }}
             animate={{
@@ -118,7 +118,86 @@ const Index = () => {
               ease: "linear"
             }}
           />
+          
+          {/* Animated light waves moving along grid */}
+          {[...Array(8)].map((_, i) => (
+            <motion.div
+              key={i}
+              className="absolute h-[1.5px] w-full"
+              style={{
+                top: `${i * 12.5}%`,
+                background: `linear-gradient(90deg, transparent, hsl(var(--primary)) 50%, transparent)`,
+                boxShadow: '0 0 10px hsl(var(--primary)), 0 0 20px hsl(var(--primary))',
+              }}
+              animate={{
+                x: ['-100%', '200%'],
+                opacity: [0, 1, 1, 0],
+              }}
+              transition={{
+                duration: 4 + i * 0.5,
+                repeat: Infinity,
+                delay: i * 0.8,
+                ease: "easeInOut"
+              }}
+            />
+          ))}
+          
+          {[...Array(6)].map((_, i) => (
+            <motion.div
+              key={`v-${i}`}
+              className="absolute w-[1.5px] h-full"
+              style={{
+                left: `${i * 16.66}%`,
+                background: `linear-gradient(180deg, transparent, hsl(var(--secondary)) 50%, transparent)`,
+                boxShadow: '0 0 10px hsl(var(--secondary)), 0 0 20px hsl(var(--secondary))',
+              }}
+              animate={{
+                y: ['-100%', '200%'],
+                opacity: [0, 1, 1, 0],
+              }}
+              transition={{
+                duration: 5 + i * 0.6,
+                repeat: Infinity,
+                delay: i * 1,
+                ease: "easeInOut"
+              }}
+            />
+          ))}
         </div>
+        
+        {/* Spinning cogs */}
+        {[...Array(5)].map((_, i) => (
+          <motion.div
+            key={`cog-${i}`}
+            className="absolute rounded-full border-2 border-accent/30"
+            style={{
+              width: `${60 + i * 40}px`,
+              height: `${60 + i * 40}px`,
+              top: `${15 + i * 15}%`,
+              left: `${5 + i * 18}%`,
+            }}
+            animate={{
+              rotate: i % 2 === 0 ? 360 : -360,
+            }}
+            transition={{
+              duration: 10 + i * 3,
+              repeat: Infinity,
+              ease: "linear"
+            }}
+          >
+            {[...Array(8)].map((_, j) => (
+              <div
+                key={j}
+                className="absolute w-1 h-3 bg-accent/40 rounded-full"
+                style={{
+                  top: '50%',
+                  left: '50%',
+                  transform: `translate(-50%, -50%) rotate(${j * 45}deg) translateY(-${30 + i * 20}px)`,
+                }}
+              />
+            ))}
+          </motion.div>
+        ))}
 
         <div className="max-w-7xl mx-auto relative z-10">
           <motion.div
