@@ -176,18 +176,26 @@ const Index = () => {
         
         {/* Spinning proper gears - positioned to avoid text */}
         {[
-          { size: 80, top: "5%", left: "3%", teeth: 12, speed: 8 },
-          { size: 120, top: "60%", left: "85%", teeth: 16, speed: 6 },
-          { size: 100, top: "75%", left: "8%", teeth: 14, speed: 7 },
+          { size: 60, top: "3%", left: "1%", teeth: 8, speed: 5 },
+          { size: 90, top: "8%", right: "2%", teeth: 8, speed: 4 },
+          { size: 70, bottom: "5%", left: "2%", teeth: 8, speed: 4.5 },
         ].map((gear, i) => (
-          <div key={`gear-group-${i}`} className="absolute" style={{ top: gear.top, left: gear.left }}>
+          <div 
+            key={`gear-group-${i}`} 
+            className="absolute hidden md:block pointer-events-none" 
+            style={{ 
+              top: gear.top, 
+              left: gear.left, 
+              right: gear.right,
+              bottom: gear.bottom,
+              zIndex: 0
+            }}
+          >
             {/* Main gear */}
-            <motion.div
-              className="relative"
-              style={{
-                width: `${gear.size}px`,
-                height: `${gear.size}px`,
-              }}
+            <motion.svg
+              width={gear.size}
+              height={gear.size}
+              viewBox="0 0 100 100"
               animate={{
                 rotate: i % 2 === 0 ? 360 : -360,
               }}
@@ -196,46 +204,84 @@ const Index = () => {
                 repeat: Infinity,
                 ease: "linear"
               }}
+              className="drop-shadow-lg"
             >
-              {/* Gear center circle */}
-              <div 
-                className="absolute inset-0 rounded-full border-4 border-primary/40 bg-background/20"
-                style={{
-                  width: `${gear.size * 0.6}px`,
-                  height: `${gear.size * 0.6}px`,
-                  left: '50%',
-                  top: '50%',
-                  transform: 'translate(-50%, -50%)'
-                }}
+              {/* Gear body with proper teeth shape */}
+              <defs>
+                <radialGradient id={`gear-gradient-${i}`}>
+                  <stop offset="0%" stopColor="hsl(var(--primary))" stopOpacity="0.3" />
+                  <stop offset="100%" stopColor="hsl(var(--primary))" stopOpacity="0.6" />
+                </radialGradient>
+              </defs>
+              
+              {/* Create proper gear shape with rounded teeth */}
+              <path
+                d={`M 50 50 ${[...Array(gear.teeth)].map((_, j) => {
+                  const angle = (j * 360) / gear.teeth;
+                  const nextAngle = ((j + 1) * 360) / gear.teeth;
+                  const midAngle = (angle + nextAngle) / 2;
+                  
+                  // Tooth outer edge (bulbous part)
+                  const toothOuterRadius = 48;
+                  const toothInnerRadius = 35;
+                  const bodyRadius = 30;
+                  
+                  const angleRad1 = (angle - 8) * Math.PI / 180;
+                  const angleRad2 = (angle + 8) * Math.PI / 180;
+                  const midAngleRad = midAngle * Math.PI / 180;
+                  const nextAngleRad1 = (nextAngle - 8) * Math.PI / 180;
+                  
+                  // Points for rounded tooth
+                  const x1 = 50 + Math.cos(angleRad1) * bodyRadius;
+                  const y1 = 50 + Math.sin(angleRad1) * bodyRadius;
+                  const x2 = 50 + Math.cos(angleRad1) * toothInnerRadius;
+                  const y2 = 50 + Math.sin(angleRad1) * toothInnerRadius;
+                  const x3 = 50 + Math.cos(midAngleRad) * toothOuterRadius;
+                  const y3 = 50 + Math.sin(midAngleRad) * toothOuterRadius;
+                  const x4 = 50 + Math.cos(angleRad2) * toothInnerRadius;
+                  const y4 = 50 + Math.sin(angleRad2) * toothInnerRadius;
+                  const x5 = 50 + Math.cos(angleRad2) * bodyRadius;
+                  const y5 = 50 + Math.sin(angleRad2) * bodyRadius;
+                  
+                  return `L ${x1} ${y1} L ${x2} ${y2} Q ${x3} ${y3} ${x4} ${y4} L ${x5} ${y5}`;
+                }).join(' ')} Z`}
+                fill={`url(#gear-gradient-${i})`}
+                stroke="hsl(var(--primary))"
+                strokeWidth="1"
+                opacity="0.8"
               />
               
-              {/* Gear teeth */}
-              {[...Array(gear.teeth)].map((_, j) => (
-                <div
-                  key={j}
-                  className="absolute bg-primary/50"
-                  style={{
-                    width: `${gear.size * 0.15}px`,
-                    height: `${gear.size * 0.3}px`,
-                    left: '50%',
-                    top: '50%',
-                    transform: `translate(-50%, -50%) rotate(${j * (360 / gear.teeth)}deg) translateY(-${gear.size * 0.5}px)`,
-                    borderRadius: '3px',
-                    boxShadow: '0 0 8px hsl(var(--primary)/0.5)',
-                  }}
-                />
-              ))}
-            </motion.div>
+              {/* Center hole */}
+              <circle
+                cx="50"
+                cy="50"
+                r="15"
+                fill="hsl(var(--background))"
+                stroke="hsl(var(--primary))"
+                strokeWidth="2"
+                opacity="0.9"
+              />
+              
+              {/* Center highlight */}
+              <circle
+                cx="50"
+                cy="50"
+                r="12"
+                fill="hsl(var(--background))"
+                opacity="0.3"
+              />
+            </motion.svg>
             
             {/* Connection line to next gear (only for first two) */}
             {i < 2 && (
               <div 
                 className="absolute border-t-2 border-dashed border-accent/30"
                 style={{
-                  width: i === 0 ? '82%' : '78%',
-                  left: i === 0 ? '100%' : '-78%',
+                  width: i === 0 ? '85vw' : '40vw',
+                  left: i === 0 ? '100%' : 'auto',
+                  right: i === 0 ? 'auto' : '100%',
                   top: '50%',
-                  transformOrigin: 'left center',
+                  transformOrigin: i === 0 ? 'left center' : 'right center',
                 }}
               />
             )}
@@ -252,8 +298,19 @@ const Index = () => {
             <motion.h1 
               className="mb-8 md:mb-12"
               initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 1, delay: 0.2 }}
+              animate={{ 
+                opacity: 1,
+                y: [0, -10, 0]
+              }}
+              transition={{ 
+                opacity: { duration: 1, delay: 0.2 },
+                y: { 
+                  duration: 2, 
+                  repeat: Infinity, 
+                  ease: "easeInOut",
+                  delay: 1
+                }
+              }}
             >
               {["We", "Build", "the", "Systems"].map((word, i) => (
                 <motion.span
