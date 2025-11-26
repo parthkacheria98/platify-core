@@ -174,119 +174,122 @@ const Index = () => {
           ))}
         </div>
         
-        {/* Spinning proper gears - positioned to avoid text */}
+        {/* Spinning proper gears - matching reference positions */}
         {[
-          { size: 60, top: "3%", left: "1%", teeth: 8, speed: 5 },
-          { size: 90, top: "8%", right: "2%", teeth: 8, speed: 4 },
-          { size: 70, bottom: "5%", left: "2%", teeth: 8, speed: 4.5 },
-        ].map((gear, i) => (
-          <div 
-            key={`gear-group-${i}`} 
-            className="absolute hidden md:block pointer-events-none" 
-            style={{ 
-              top: gear.top, 
-              left: gear.left, 
-              right: gear.right,
-              bottom: gear.bottom,
-              zIndex: 0
-            }}
-          >
-            {/* Main gear */}
-            <motion.svg
-              width={gear.size}
-              height={gear.size}
-              viewBox="0 0 100 100"
-              animate={{
-                rotate: i % 2 === 0 ? 360 : -360,
-              }}
-              transition={{
-                duration: gear.speed,
-                repeat: Infinity,
-                ease: "linear"
-              }}
-              className="drop-shadow-lg"
-            >
-              {/* Gear body with proper teeth shape */}
-              <defs>
-                <radialGradient id={`gear-gradient-${i}`}>
-                  <stop offset="0%" stopColor="hsl(var(--primary))" stopOpacity="0.3" />
-                  <stop offset="100%" stopColor="hsl(var(--primary))" stopOpacity="0.6" />
-                </radialGradient>
-              </defs>
-              
-              {/* Create proper gear shape with rounded teeth */}
-              <path
-                d={`M 50 50 ${[...Array(gear.teeth)].map((_, j) => {
-                  const angle = (j * 360) / gear.teeth;
-                  const nextAngle = ((j + 1) * 360) / gear.teeth;
-                  const midAngle = (angle + nextAngle) / 2;
-                  
-                  // Tooth outer edge (bulbous part)
-                  const toothOuterRadius = 48;
-                  const toothInnerRadius = 35;
-                  const bodyRadius = 30;
-                  
-                  const angleRad1 = (angle - 8) * Math.PI / 180;
-                  const angleRad2 = (angle + 8) * Math.PI / 180;
-                  const midAngleRad = midAngle * Math.PI / 180;
-                  const nextAngleRad1 = (nextAngle - 8) * Math.PI / 180;
-                  
-                  // Points for rounded tooth
-                  const x1 = 50 + Math.cos(angleRad1) * bodyRadius;
-                  const y1 = 50 + Math.sin(angleRad1) * bodyRadius;
-                  const x2 = 50 + Math.cos(angleRad1) * toothInnerRadius;
-                  const y2 = 50 + Math.sin(angleRad1) * toothInnerRadius;
-                  const x3 = 50 + Math.cos(midAngleRad) * toothOuterRadius;
-                  const y3 = 50 + Math.sin(midAngleRad) * toothOuterRadius;
-                  const x4 = 50 + Math.cos(angleRad2) * toothInnerRadius;
-                  const y4 = 50 + Math.sin(angleRad2) * toothInnerRadius;
-                  const x5 = 50 + Math.cos(angleRad2) * bodyRadius;
-                  const y5 = 50 + Math.sin(angleRad2) * bodyRadius;
-                  
-                  return `L ${x1} ${y1} L ${x2} ${y2} Q ${x3} ${y3} ${x4} ${y4} L ${x5} ${y5}`;
-                }).join(' ')} Z`}
-                fill={`url(#gear-gradient-${i})`}
-                stroke="hsl(var(--primary))"
-                strokeWidth="1"
-                opacity="0.8"
-              />
-              
-              {/* Center hole */}
-              <circle
-                cx="50"
-                cy="50"
-                r="15"
-                fill="hsl(var(--background))"
-                stroke="hsl(var(--primary))"
-                strokeWidth="2"
-                opacity="0.9"
-              />
-              
-              {/* Center highlight */}
-              <circle
-                cx="50"
-                cy="50"
-                r="12"
-                fill="hsl(var(--background))"
-                opacity="0.3"
-              />
-            </motion.svg>
+          { size: 80, top: "80px", left: "40px", speed: 6 },
+          { size: 100, top: "80px", right: "80px", speed: 5 },
+          { size: 140, top: "420px", right: "120px", speed: 7 },
+          { size: 70, bottom: "150px", left: "30px", speed: 5.5 },
+        ].map((gear, i) => {
+          // Generate 6-tooth gear path with rounded bulbous shape
+          const teeth = 6;
+          const innerRadius = 30;  // valley radius
+          const outerRadius = 48;  // peak radius
+          const center = 50;
+          
+          let pathData = "";
+          
+          for (let t = 0; t < teeth; t++) {
+            const angle = (t * 360) / teeth;
+            const nextAngle = ((t + 1) * 360) / teeth;
+            const midAngle = (angle + nextAngle) / 2;
             
-            {/* Connection line to next gear (only for first two) */}
-            {i < 2 && (
-              <div 
-                className="absolute border-t-2 border-dashed border-accent/30"
-                style={{
-                  width: i === 0 ? '85vw' : '40vw',
-                  left: i === 0 ? '100%' : 'auto',
-                  right: i === 0 ? 'auto' : '100%',
-                  top: '50%',
-                  transformOrigin: i === 0 ? 'left center' : 'right center',
+            // Convert to radians
+            const a1 = ((angle - 15) * Math.PI) / 180;
+            const a2 = (midAngle * Math.PI) / 180;
+            const a3 = ((nextAngle + 15) * Math.PI) / 180;
+            
+            // Valley point (start)
+            const x1 = center + Math.cos(a1) * innerRadius;
+            const y1 = center + Math.sin(a1) * innerRadius;
+            
+            // Peak point (tooth tip)
+            const x2 = center + Math.cos(a2) * outerRadius;
+            const y2 = center + Math.sin(a2) * outerRadius;
+            
+            // Valley point (end)
+            const x3 = center + Math.cos(a3) * innerRadius;
+            const y3 = center + Math.sin(a3) * innerRadius;
+            
+            // Control points for smooth curves
+            const cx1 = center + Math.cos(a1 + 0.15) * (innerRadius + 8);
+            const cy1 = center + Math.sin(a1 + 0.15) * (innerRadius + 8);
+            const cx2 = center + Math.cos(a2) * (outerRadius - 2);
+            const cy2 = center + Math.sin(a2) * (outerRadius - 2);
+            const cx3 = center + Math.cos(a3 - 0.15) * (innerRadius + 8);
+            const cy3 = center + Math.sin(a3 - 0.15) * (innerRadius + 8);
+            
+            if (t === 0) {
+              pathData += `M ${x1} ${y1} `;
+            }
+            
+            // Curve up to tooth peak
+            pathData += `Q ${cx1} ${cy1}, ${x2} ${y2} `;
+            // Curve down to next valley
+            pathData += `Q ${cx3} ${cy3}, ${x3} ${y3} `;
+          }
+          
+          pathData += "Z";
+          
+          return (
+            <div 
+              key={`gear-group-${i}`} 
+              className="absolute pointer-events-none" 
+              style={{ 
+                top: gear.top, 
+                left: gear.left, 
+                right: gear.right,
+                bottom: gear.bottom,
+                zIndex: 0
+              }}
+            >
+              <motion.svg
+                width={gear.size}
+                height={gear.size}
+                viewBox="0 0 100 100"
+                animate={{
+                  rotate: i % 2 === 0 ? 360 : -360,
                 }}
-              />
-            )}
-          </div>
-        ))}
+                transition={{
+                  duration: gear.speed,
+                  repeat: Infinity,
+                  ease: "linear"
+                }}
+              >
+                <defs>
+                  <filter id={`glow-${i}`}>
+                    <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
+                    <feMerge>
+                      <feMergeNode in="coloredBlur"/>
+                      <feMergeNode in="SourceGraphic"/>
+                    </feMerge>
+                  </filter>
+                </defs>
+                
+                {/* 6-tooth gear with rounded bulbous teeth */}
+                <path
+                  d={pathData}
+                  fill="hsl(var(--primary))"
+                  fillOpacity="0.35"
+                  stroke="hsl(var(--primary))"
+                  strokeWidth="1.5"
+                  filter={`url(#glow-${i})`}
+                />
+                
+                {/* Center hole */}
+                <circle
+                  cx="50"
+                  cy="50"
+                  r="18"
+                  fill="hsl(var(--background))"
+                  fillOpacity="0.9"
+                  stroke="hsl(var(--primary))"
+                  strokeWidth="2"
+                />
+              </motion.svg>
+            </div>
+          );
+        })}
 
         <div className="max-w-7xl mx-auto relative z-10">
           <motion.div
