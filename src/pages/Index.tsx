@@ -181,113 +181,57 @@ const Index = () => {
           { size: 140, top: "420px", right: "120px", speed: 7 },
           { size: 70, bottom: "150px", left: "30px", speed: 5.5 },
         ].map((gear, i) => {
-          // Exact 8-tooth gear from reference image with rounded bulbous teeth
-          const pathData = `
-            M 50,12 
-            C 53,12 55,14 56,17 
-            L 58,24 
-            C 59,27 61,29 64,29 
-            C 67,29 69,27 70,24 
-            L 72,17 
-            C 73,14 75,12 78,12 
-            C 81,12 83,14 84,17 
-            L 86,24 
-            C 87,27 89,29 92,29 
-            C 95,29 97,27 98,24 
-            L 100,17 
-            C 101,14 103,12 106,12 
-            L 106,38 
-            C 103,38 101,40 100,43 
-            L 98,50 
-            C 97,53 95,55 92,55 
-            C 89,55 87,53 86,50 
-            L 84,43 
-            C 83,40 81,38 78,38 
-            C 75,38 73,40 72,43 
-            L 70,50 
-            C 69,53 67,55 64,55 
-            C 61,55 59,53 58,50 
-            L 56,43 
-            C 55,40 53,38 50,38 
-            C 47,38 45,40 44,43 
-            L 42,50 
-            C 41,53 39,55 36,55 
-            C 33,55 31,53 30,50 
-            L 28,43 
-            C 27,40 25,38 22,38 
-            C 19,38 17,40 16,43 
-            L 14,50 
-            C 13,53 11,55 8,55 
-            C 5,55 3,53 2,50 
-            L 0,43 
-            C -1,40 -3,38 -6,38 
-            L -6,12 
-            C -3,12 -1,14 0,17 
-            L 2,24 
-            C 3,27 5,29 8,29 
-            C 11,29 13,27 14,24 
-            L 16,17 
-            C 17,14 19,12 22,12 
-            C 25,12 27,14 28,17 
-            L 30,24 
-            C 31,27 33,29 36,29 
-            C 39,29 41,27 42,24 
-            L 44,17 
-            C 45,14 47,12 50,12 
-            Z
-          `.replace(/\s+/g, ' ').trim();
-          
-          // Simpler, more accurate 8-tooth gear based on reference
+          // 8-tooth gear with FLAT tops and rounded valleys
           const teeth = 8;
           const center = 50;
           const innerRadius = 32;
           const outerRadius = 50;
-          const toothWidth = 18;
           
           let gearPath = "";
           
           for (let t = 0; t < teeth; t++) {
-            const angle = (t * 360 / teeth) - 90; // Start at top
+            const angle = (t * 360 / teeth) - 90;
             const nextAngle = ((t + 1) * 360 / teeth) - 90;
             
-            // Angles for tooth curves
+            // Angles for tooth structure
             const valleyStart = angle * Math.PI / 180;
-            const toothTip = (angle + (nextAngle - angle) / 2) * Math.PI / 180;
+            const toothStart = (angle + 8) * Math.PI / 180;
+            const toothEnd = (nextAngle - 8) * Math.PI / 180;
             const valleyEnd = nextAngle * Math.PI / 180;
             
-            // Valley start point
-            const x1 = center + Math.cos(valleyStart) * innerRadius;
-            const y1 = center + Math.sin(valleyStart) * innerRadius;
+            // Valley start
+            const vx1 = center + Math.cos(valleyStart) * innerRadius;
+            const vy1 = center + Math.sin(valleyStart) * innerRadius;
             
-            // Tooth tip (bulbous peak)
-            const tipX = center + Math.cos(toothTip) * outerRadius;
-            const tipY = center + Math.sin(toothTip) * outerRadius;
+            // Tooth start (where it goes flat)
+            const tx1 = center + Math.cos(toothStart) * outerRadius;
+            const ty1 = center + Math.sin(toothStart) * outerRadius;
             
-            // Valley end point
-            const x2 = center + Math.cos(valleyEnd) * innerRadius;
-            const y2 = center + Math.sin(valleyEnd) * innerRadius;
+            // Tooth end (where flat ends)
+            const tx2 = center + Math.cos(toothEnd) * outerRadius;
+            const ty2 = center + Math.sin(toothEnd) * outerRadius;
             
-            // Control points for smooth, bulbous curves
-            const cp1x = center + Math.cos(valleyStart + 0.2) * (innerRadius + 14);
-            const cp1y = center + Math.sin(valleyStart + 0.2) * (innerRadius + 14);
+            // Valley end
+            const vx2 = center + Math.cos(valleyEnd) * innerRadius;
+            const vy2 = center + Math.sin(valleyEnd) * innerRadius;
             
-            const cp2x = center + Math.cos(toothTip - 0.15) * (outerRadius - 3);
-            const cp2y = center + Math.sin(toothTip - 0.15) * (outerRadius - 3);
+            // Control points for curves
+            const cp1x = center + Math.cos(valleyStart + 0.15) * (innerRadius + 12);
+            const cp1y = center + Math.sin(valleyStart + 0.15) * (innerRadius + 12);
             
-            const cp3x = center + Math.cos(toothTip + 0.15) * (outerRadius - 3);
-            const cp3y = center + Math.sin(toothTip + 0.15) * (outerRadius - 3);
-            
-            const cp4x = center + Math.cos(valleyEnd - 0.2) * (innerRadius + 14);
-            const cp4y = center + Math.sin(valleyEnd - 0.2) * (innerRadius + 14);
+            const cp2x = center + Math.cos(toothEnd + 0.15) * (innerRadius + 12);
+            const cp2y = center + Math.sin(toothEnd + 0.15) * (innerRadius + 12);
             
             if (t === 0) {
-              gearPath += `M ${x1},${y1} `;
+              gearPath += `M ${vx1},${vy1} `;
             }
             
-            // Smooth curve up to tooth tip
-            gearPath += `C ${cp1x},${cp1y} ${cp2x},${cp2y} ${tipX},${tipY} `;
-            // Smooth curve down from tooth tip
-            gearPath += `C ${cp3x},${cp3y} ${cp4x},${cp4y} ${x2},${y2} `;
+            // Curve from valley up to flat tooth top
+            gearPath += `Q ${cp1x},${cp1y} ${tx1},${ty1} `;
+            // FLAT top of tooth
+            gearPath += `L ${tx2},${ty2} `;
+            // Curve down from flat top to next valley
+            gearPath += `Q ${cp2x},${cp2y} ${vx2},${vy2} `;
           }
           
           gearPath += "Z";
