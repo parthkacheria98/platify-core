@@ -2,6 +2,7 @@ import { Link, useLocation } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { cn } from "@/lib/utils";
 import { ThemeToggle } from "./ThemeToggle";
+import platifyLogo from "@/assets/platify-logo.png";
 
 const Navigation = () => {
   const location = useLocation();
@@ -34,9 +35,9 @@ const Navigation = () => {
         <div className="flex items-center justify-between h-20 md:h-24 gap-4">
           <Link
             to="/"
-            className="text-lg md:text-xl font-light tracking-tight hover:opacity-70 transition-opacity duration-300 flex-shrink-0"
+            className="hover:opacity-70 transition-opacity duration-300 flex-shrink-0"
           >
-            Platify
+            <img src={platifyLogo} alt="Platify" className="h-8 md:h-10 w-auto" />
           </Link>
 
           <div className="flex items-center gap-4 md:gap-8 lg:gap-12 flex-wrap justify-end">
