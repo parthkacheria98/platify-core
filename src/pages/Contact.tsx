@@ -129,10 +129,10 @@ const Contact = () => {
                     <div>
                       <p className="text-sm text-muted-foreground mb-2">Email</p>
                       <a
-                        href="mailto:hello@studio.com"
+                        href="mailto:hello@platify.com"
                         className="text-lg hover:text-muted-foreground transition-colors duration-300"
                       >
-                        hello@studio.com
+                        hello@platify.com
                       </a>
                     </div>
                     <div>

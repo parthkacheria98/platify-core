@@ -71,11 +71,7 @@ const Index = () => {
   ];
 
   const buildTypes = [
-    { 
-      name: "Complete Business Platforms", 
-      description: "Full-stack systems that power your entire operation",
-      highlight: true 
-    },
+    { name: "Complete Business Platforms", description: "Full-stack systems that power your entire operation" },
     { name: "Internal Tools", description: "Custom dashboards and admin panels" },
     { name: "Workflow Automation", description: "Streamline repetitive processes" },
     { name: "Client Portals", description: "White-label customer platforms" },
@@ -360,25 +356,48 @@ const Index = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 1 }}
+            className="flex flex-col sm:flex-row gap-4"
           >
             <Link to="/contact">
               <Button variant="premium" size="xl" className="animate-glow">
-                Book a Private Consultation
+                Make me a platform
               </Button>
             </Link>
+            <Button variant="outline" size="xl">
+              How does it work?
+            </Button>
           </motion.div>
         </div>
       </section>
 
       {/* Replace Your Patchwork Tools */}
-      <section className="py-24 md:py-32 px-6 lg:px-12 border-t border-border/50">
-        <div className="max-w-6xl mx-auto">
+      <section className="relative py-24 md:py-32 px-6 lg:px-12 border-t border-border/50 overflow-hidden">
+        {/* Animated gradient background */}
+        <motion.div 
+          className="absolute inset-0 opacity-20"
+          animate={{
+            background: [
+              'radial-gradient(circle at 0% 0%, hsl(var(--destructive)/0.3) 0%, transparent 50%)',
+              'radial-gradient(circle at 100% 0%, hsl(var(--destructive)/0.3) 0%, transparent 50%)',
+              'radial-gradient(circle at 100% 100%, hsl(var(--destructive)/0.3) 0%, transparent 50%)',
+              'radial-gradient(circle at 0% 100%, hsl(var(--destructive)/0.3) 0%, transparent 50%)',
+              'radial-gradient(circle at 0% 0%, hsl(var(--destructive)/0.3) 0%, transparent 50%)',
+            ]
+          }}
+          transition={{
+            duration: 15,
+            repeat: Infinity,
+            ease: "linear"
+          }}
+        />
+        
+        <div className="max-w-7xl mx-auto relative z-10">
           <motion.h2
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
-            className="mb-12 md:mb-16"
+            className="mb-12 md:mb-16 text-center"
           >
             Replace Your Patchwork Tools
           </motion.h2>
@@ -388,56 +407,131 @@ const Index = () => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: 0.2 }}
-            className="text-xl md:text-2xl text-muted-foreground leading-relaxed font-light mb-12"
+            className="text-xl md:text-2xl text-muted-foreground leading-relaxed font-light mb-16 text-center max-w-4xl mx-auto"
           >
-            Your team shouldn't have to juggle Google Sheets, Notion wikis, WhatsApp threads, email chains, Zapier flows, disconnected forms, and offline steps. We unify them into one elegant platform—designed for the way you actually work.
+            Your team shouldn't have to juggle disconnected tools. We unify them into one elegant platform—designed for the way you actually work.
           </motion.p>
           
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4 gap-4 md:gap-6 max-w-5xl mx-auto">
             {["Spreadsheets", "Notion", "WhatsApp", "Email", "Zapier", "Forms", "Manual Steps", "Disconnected Tools"].map((tool, i) => (
               <motion.div
                 key={tool}
-                initial={{ opacity: 0, x: -50 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true, margin: "-100px" }}
+                initial={{ opacity: 0, scale: 0.8 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                viewport={{ once: true, margin: "-50px" }}
                 transition={{ 
-                  duration: 0.3, 
-                  delay: i * 0.15,
-                  ease: "easeOut"
+                  duration: 0.4, 
+                  delay: i * 0.08,
+                  ease: [0.34, 1.56, 0.64, 1]
                 }}
-                className="relative p-4 bg-muted/60 backdrop-blur-sm rounded-lg border border-border/30 text-center overflow-hidden"
+                className="relative group"
               >
-                <motion.span 
-                  className="relative z-10 inline-block"
-                  initial={{ opacity: 1 }}
-                  whileInView={{ opacity: 0.4 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.2, delay: i * 0.15 + 0.3 }}
-                >
-                  {tool}
-                </motion.span>
-                
-                {/* Violent strike-through line */}
-                <motion.div
-                  className="absolute inset-0 flex items-center justify-center"
-                  initial={{ scaleX: 0, rotate: -8 }}
-                  whileInView={{ scaleX: 1, rotate: -8 }}
-                  viewport={{ once: true }}
-                  transition={{ 
-                    duration: 0.4, 
-                    delay: i * 0.15 + 0.3,
-                    ease: [0.68, -0.55, 0.265, 1.55]
-                  }}
-                >
-                  <div className="w-full h-1 bg-destructive shadow-[0_0_10px_hsl(var(--destructive))]" 
-                    style={{
-                      transformOrigin: 'center',
+                <div className="relative p-6 bg-card/80 backdrop-blur-sm rounded-2xl border-2 border-border/40 text-center overflow-hidden transition-all duration-300 hover:border-destructive/50">
+                  <motion.span 
+                    className="relative z-10 inline-block text-sm md:text-base"
+                    initial={{ opacity: 1 }}
+                    whileInView={{ opacity: 0.3 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.3, delay: i * 0.08 + 0.4 }}
+                  >
+                    {tool}
+                  </motion.span>
+                  
+                  {/* Animated X strike-through */}
+                  <motion.div
+                    className="absolute inset-0 flex items-center justify-center pointer-events-none"
+                    initial={{ scale: 0, rotate: 0 }}
+                    whileInView={{ scale: 1, rotate: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ 
+                      duration: 0.5, 
+                      delay: i * 0.08 + 0.4,
+                      ease: [0.68, -0.55, 0.265, 1.55]
                     }}
-                  />
-                </motion.div>
+                  >
+                    <svg width="100%" height="100%" className="absolute inset-0">
+                      <motion.line
+                        x1="20%"
+                        y1="20%"
+                        x2="80%"
+                        y2="80%"
+                        stroke="hsl(var(--destructive))"
+                        strokeWidth="3"
+                        strokeLinecap="round"
+                        initial={{ pathLength: 0 }}
+                        whileInView={{ pathLength: 1 }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.3, delay: i * 0.08 + 0.5 }}
+                        style={{
+                          filter: 'drop-shadow(0 0 8px hsl(var(--destructive)))'
+                        }}
+                      />
+                      <motion.line
+                        x1="80%"
+                        y1="20%"
+                        x2="20%"
+                        y2="80%"
+                        stroke="hsl(var(--destructive))"
+                        strokeWidth="3"
+                        strokeLinecap="round"
+                        initial={{ pathLength: 0 }}
+                        whileInView={{ pathLength: 1 }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.3, delay: i * 0.08 + 0.5 }}
+                        style={{
+                          filter: 'drop-shadow(0 0 8px hsl(var(--destructive)))'
+                        }}
+                      />
+                    </svg>
+                  </motion.div>
+                </div>
               </motion.div>
             ))}
           </div>
+          
+          {/* Arrow pointing down */}
+          <motion.div
+            initial={{ opacity: 0, y: -20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 1.2 }}
+            className="flex justify-center mt-16 mb-8"
+          >
+            <motion.div
+              animate={{ y: [0, 10, 0] }}
+              transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+            >
+              <svg width="48" height="48" viewBox="0 0 24 24" fill="none" className="text-primary">
+                <path d="M12 5V19M12 19L5 12M12 19L19 12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+            </motion.div>
+          </motion.div>
+          
+          {/* One Platform */}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.7, delay: 1.4 }}
+            className="max-w-2xl mx-auto"
+          >
+            <div className="relative p-12 bg-gradient-to-br from-primary/20 to-secondary/20 backdrop-blur-sm rounded-3xl border-2 border-primary/50 text-center overflow-hidden">
+              <motion.div
+                className="absolute inset-0 bg-gradient-to-r from-primary/10 to-secondary/10"
+                animate={{
+                  scale: [1, 1.2, 1],
+                  opacity: [0.3, 0.6, 0.3],
+                }}
+                transition={{
+                  duration: 3,
+                  repeat: Infinity,
+                  ease: "easeInOut"
+                }}
+              />
+              <h3 className="text-3xl md:text-4xl font-light mb-4 relative z-10">One Platform</h3>
+              <p className="text-lg text-muted-foreground relative z-10">Built exactly for your workflow</p>
+            </div>
+          </motion.div>
         </div>
       </section>
 
@@ -462,16 +556,12 @@ const Index = () => {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: index * 0.08 }}
-                whileHover={{ scale: 1.05, rotate: type.highlight ? 0 : 0 }}
+                whileHover={{ scale: 1.05 }}
                 className="group"
               >
-                <div className={`p-8 rounded-xl border-2 transition-all duration-500 h-full ${
-                  type.highlight 
-                    ? "bg-primary text-primary-foreground border-primary hover:border-primary-hover hover:shadow-[0_0_30px_hsl(var(--primary)/0.4)]" 
-                    : "bg-card border-border hover:border-primary/50 hover:shadow-[0_0_20px_hsl(var(--primary)/0.15)]"
-                }`}>
+                <div className="p-8 rounded-xl border-2 bg-card border-border hover:border-primary/50 hover:shadow-[0_0_20px_hsl(var(--primary)/0.15)] transition-all duration-500 h-full">
                   <h4 className="mb-3">{type.name}</h4>
-                  <p className={`text-sm leading-relaxed ${type.highlight ? "text-primary-foreground/90" : "text-muted-foreground"}`}>{type.description}</p>
+                  <p className="text-sm leading-relaxed text-muted-foreground">{type.description}</p>
                 </div>
               </motion.div>
             ))}
@@ -617,44 +707,6 @@ const Index = () => {
         </div>
       </section>
 
-      {/* Process */}
-      <section className="py-24 md:py-32 px-6 lg:px-12 border-t border-border/50">
-        <div className="max-w-7xl mx-auto">
-          <motion.h2
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="mb-16 md:mb-24"
-          >
-            How We Work
-          </motion.h2>
-          
-          <div className="grid grid-cols-1 md:grid-cols-5 gap-8 md:gap-4">
-            {["Consult", "Scope", "Design", "Build", "Refine"].map((step, index) => (
-              <motion.div
-                key={step}
-                initial={{ opacity: 0, scale: 0.8 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-                whileHover={{ scale: 1.1 }}
-                className="text-center"
-              >
-                <motion.div
-                  className="mb-4 text-6xl font-light text-muted-foreground/30"
-                  whileHover={{ color: "hsl(var(--primary))" }}
-                  transition={{ duration: 0.3 }}
-                >
-                  {(index + 1).toString().padStart(2, "0")}
-                </motion.div>
-                <h4 className="font-light">{step}</h4>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-
       {/* Final CTA */}
       <section className="py-24 md:py-32 px-6 lg:px-12 border-t border-border/50">
         <div className="max-w-4xl mx-auto text-center">
@@ -686,7 +738,7 @@ const Index = () => {
           >
             <Link to="/contact">
               <Button variant="premium" size="xl">
-                Book a Private Consultation
+                Make me a platform
               </Button>
             </Link>
           </motion.div>
