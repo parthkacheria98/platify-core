@@ -360,7 +360,7 @@ const Index = () => {
           >
             <Link to="/contact">
               <Button variant="premium" size="xl" className="animate-glow">
-                Make me a platform
+                Upgrade my workflow!
               </Button>
             </Link>
             <Button variant="outline" size="xl">
@@ -738,7 +738,7 @@ const Index = () => {
           >
             <Link to="/contact">
               <Button variant="premium" size="xl">
-                Make me a platform
+                Upgrade my workflow!
               </Button>
             </Link>
           </motion.div>
