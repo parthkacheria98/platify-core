@@ -36,7 +36,7 @@ const Navigation = () => {
             to="/"
             className="text-lg md:text-xl font-light tracking-tight hover:opacity-70 transition-opacity duration-300 flex-shrink-0"
           >
-            Studio
+            platify
           </Link>
 
           <div className="flex items-center gap-4 md:gap-8 lg:gap-12 flex-wrap justify-end">
