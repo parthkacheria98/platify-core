@@ -129,21 +129,21 @@ const Contact = () => {
                     <div>
                       <p className="text-sm text-muted-foreground mb-2">Email</p>
                       <a
-                        href="mailto:hello@platify.com"
+                        href="mailto:build@platify.com"
                         className="text-lg hover:text-muted-foreground transition-colors duration-300"
                       >
-                        hello@platify.com
+                        build@platify.com
                       </a>
                     </div>
                     <div>
                       <p className="text-sm text-muted-foreground mb-2">WhatsApp</p>
                       <a
-                        href="https://wa.me/1234567890"
+                        href="https://wa.me/919769472784"
                         target="_blank"
                         rel="noopener noreferrer"
                         className="text-lg hover:text-muted-foreground transition-colors duration-300"
                       >
-                        +1 (234) 567-890
+                        +91 9769472784
                       </a>
                     </div>
                   </div>
@@ -176,7 +176,7 @@ const Contact = () => {
                   <p className="text-muted-foreground">
                     Monday – Friday
                     <br />
-                    9:00 AM – 6:00 PM EST
+                    9:00 AM – 6:00 PM IST
                   </p>
                 </div>
               </div>

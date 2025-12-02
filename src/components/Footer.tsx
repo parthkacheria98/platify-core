@@ -40,15 +40,15 @@ const Footer = () => {
             <ul className="space-y-3">
               <li>
                 <a
-                  href="mailto:hello@platify.com"
+                  href="mailto:build@platify.com"
                   className="text-muted-foreground hover:text-foreground transition-colors duration-300"
                 >
-                  hello@platify.com
+                  build@platify.com
                 </a>
               </li>
               <li>
                 <a
-                  href="https://wa.me/1234567890"
+                  href="https://wa.me/919769472784"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-muted-foreground hover:text-foreground transition-colors duration-300"
