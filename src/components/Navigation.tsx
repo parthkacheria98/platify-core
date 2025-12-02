@@ -37,7 +37,7 @@ const Navigation = () => {
             to="/"
             className="hover:opacity-70 transition-opacity duration-300 flex-shrink-0"
           >
-            <img src={platifyLogo} alt="Platify" className="h-8 md:h-10 w-auto" />
+            <img src={platifyLogo} alt="Platify" className="h-[7.5rem] w-auto dark:invert" />
           </Link>
 
           <div className="flex items-center gap-4 md:gap-8 lg:gap-12 flex-wrap justify-end">
