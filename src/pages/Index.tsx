@@ -31,7 +31,7 @@ const Index = () => {
   const [currentOutcome, setCurrentOutcome] = useState(0);
   const [isDeleting, setIsDeleting] = useState(false);
   const [text, setText] = useState("");
-  const [delta, setDelta] = useState(150);
+  const [delta, setDelta] = useState(40);
 
   useEffect(() => {
     const ticker = setInterval(() => {
@@ -39,27 +39,27 @@ const Index = () => {
     }, delta);
 
     return () => clearInterval(ticker);
-  }, [text, isDeleting, currentOutcome]);
+  }, [text, isDeleting, currentOutcome, delta]);
 
   const tick = () => {
     const fullText = outcomes[currentOutcome];
     
     if (!isDeleting) {
       setText(fullText.substring(0, text.length + 1));
-      setDelta(100);
+      setDelta(40); // Faster typing: 40ms per character (was 100ms)
 
       if (text === fullText) {
-        setTimeout(() => setIsDeleting(true), 2000);
-        setDelta(2000);
+        setTimeout(() => setIsDeleting(true), 3000); // Display for 3 seconds (was 2s) - good reading time
+        setDelta(3000);
       }
     } else {
       setText(fullText.substring(0, text.length - 1));
-      setDelta(50);
+      setDelta(30); // Faster deleting: 30ms per character (was 50ms)
 
       if (text === "") {
         setIsDeleting(false);
         setCurrentOutcome((prev) => (prev + 1) % outcomes.length);
-        setDelta(500);
+        setDelta(300); // Shorter pause before next (was 500ms)
       }
     }
   };
