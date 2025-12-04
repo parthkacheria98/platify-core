@@ -68,7 +68,8 @@ const fragments: FragmentConfig[] = [
   },
   {
     id: "calendar-1",
-    component: CalendarFragment,
+    imagePath: "/hero-fragments/slack1.png",
+    imageAlt: "Slack fragment",
     position: { top: "8%", left: "50%", right: "auto" },
     mobilePosition: { top: "3%", left: "10%" },
     rotation: 3,
