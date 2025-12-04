@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
+import { HeroSection } from "@/components/hero/HeroSection";
 import { useState, useEffect } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 
@@ -171,67 +172,13 @@ const Index = () => {
         </div>
         
         {/* Spinning proper gears - matching reference positions with exact 8-tooth shape */}
-        {[
+        {/* Temporarily hidden */}
+        {false && [
           { size: 80, top: "80px", left: "40px", speed: 6 },
           { size: 100, top: "80px", right: "80px", speed: 5 },
           { size: 140, top: "420px", right: "120px", speed: 7 },
           { size: 70, bottom: "150px", left: "30px", speed: 5.5 },
         ].map((gear, i) => {
-          // 8-tooth gear with FLAT tops and rounded valleys
-          const teeth = 8;
-          const center = 50;
-          const innerRadius = 32;
-          const outerRadius = 50;
-          
-          let gearPath = "";
-          
-          for (let t = 0; t < teeth; t++) {
-            const angle = (t * 360 / teeth) - 90;
-            const nextAngle = ((t + 1) * 360 / teeth) - 90;
-            
-            // Angles for tooth structure
-            const valleyStart = angle * Math.PI / 180;
-            const toothStart = (angle + 8) * Math.PI / 180;
-            const toothEnd = (nextAngle - 8) * Math.PI / 180;
-            const valleyEnd = nextAngle * Math.PI / 180;
-            
-            // Valley start
-            const vx1 = center + Math.cos(valleyStart) * innerRadius;
-            const vy1 = center + Math.sin(valleyStart) * innerRadius;
-            
-            // Tooth start (where it goes flat)
-            const tx1 = center + Math.cos(toothStart) * outerRadius;
-            const ty1 = center + Math.sin(toothStart) * outerRadius;
-            
-            // Tooth end (where flat ends)
-            const tx2 = center + Math.cos(toothEnd) * outerRadius;
-            const ty2 = center + Math.sin(toothEnd) * outerRadius;
-            
-            // Valley end
-            const vx2 = center + Math.cos(valleyEnd) * innerRadius;
-            const vy2 = center + Math.sin(valleyEnd) * innerRadius;
-            
-            // Control points for curves
-            const cp1x = center + Math.cos(valleyStart + 0.15) * (innerRadius + 12);
-            const cp1y = center + Math.sin(valleyStart + 0.15) * (innerRadius + 12);
-            
-            const cp2x = center + Math.cos(toothEnd + 0.15) * (innerRadius + 12);
-            const cp2y = center + Math.sin(toothEnd + 0.15) * (innerRadius + 12);
-            
-            if (t === 0) {
-              gearPath += `M ${vx1},${vy1} `;
-            }
-            
-            // Curve from valley up to flat tooth top
-            gearPath += `Q ${cp1x},${cp1y} ${tx1},${ty1} `;
-            // FLAT top of tooth
-            gearPath += `L ${tx2},${ty2} `;
-            // Curve down from flat top to next valley
-            gearPath += `Q ${cp2x},${cp2y} ${vx2},${vy2} `;
-          }
-          
-          gearPath += "Z";
-          
           return (
             <div 
               key={`gear-group-${i}`} 
@@ -244,10 +191,15 @@ const Index = () => {
                 zIndex: 0
               }}
             >
-              <motion.svg
+              <motion.img
+                src="/gear-icon.png"
+                alt=""
                 width={gear.size}
                 height={gear.size}
-                viewBox="0 0 100 100"
+                style={{
+                  filter: "hue-rotate(0deg) saturate(1) brightness(1)",
+                  opacity: 0.35,
+                }}
                 animate={{
                   rotate: i % 2 === 0 ? 360 : -360,
                 }}
@@ -256,38 +208,7 @@ const Index = () => {
                   repeat: Infinity,
                   ease: "linear"
                 }}
-              >
-                <defs>
-                  <filter id={`glow-${i}`}>
-                    <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
-                    <feMerge>
-                      <feMergeNode in="coloredBlur"/>
-                      <feMergeNode in="SourceGraphic"/>
-                    </feMerge>
-                  </filter>
-                </defs>
-                
-                {/* 8-tooth gear with exact rounded bulbous teeth from reference */}
-                <path
-                  d={gearPath}
-                  fill="hsl(var(--primary))"
-                  fillOpacity="0.35"
-                  stroke="hsl(var(--primary))"
-                  strokeWidth="1.5"
-                  filter={`url(#glow-${i})`}
-                />
-                
-                {/* Center hole */}
-                <circle
-                  cx="50"
-                  cy="50"
-                  r="18"
-                  fill="hsl(var(--background))"
-                  fillOpacity="0.9"
-                  stroke="hsl(var(--primary))"
-                  strokeWidth="2"
-                />
-              </motion.svg>
+              />
             </div>
           );
         })}
@@ -348,7 +269,7 @@ const Index = () => {
             transition={{ duration: 0.8, delay: 0.8 }}
           >
             <p className="text-xl md:text-2xl text-muted-foreground max-w-3xl leading-relaxed mb-12 font-light">
-              Goodbye spreadsheets, Notion pages, and stitched-together automations. We design and engineer a single, bespoke platform that mirrors your exact workflow—with the precision, clarity, and polish your business deserves.
+            Drop the spreadsheets. Ditch the duct-taped automations. Get a platform designed exactly for the way you work.
             </p>
           </motion.div>
 
@@ -356,14 +277,14 @@ const Index = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 1 }}
-            className="flex flex-col sm:flex-row gap-4"
+            className="flex flex-col sm:flex-row gap-4 items-center justify-center sm:justify-start"
           >
-            <Link to="/contact">
-              <Button variant="premium" size="xl" className="animate-glow">
+            <Link to="/contact" className="w-full sm:w-auto">
+              <Button variant="premium" size="xl" className="animate-glow w-full sm:w-auto">
                 Upgrade my workflow!
               </Button>
             </Link>
-            <Button variant="outline" size="xl">
+            <Button variant="outline" size="xl" className="w-full sm:w-auto">
               How does it work?
             </Button>
           </motion.div>
@@ -371,169 +292,7 @@ const Index = () => {
       </section>
 
       {/* Replace Your Patchwork Tools */}
-      <section className="relative py-24 md:py-32 px-6 lg:px-12 border-t border-border/50 overflow-hidden">
-        {/* Animated gradient background */}
-        <motion.div 
-          className="absolute inset-0 opacity-20"
-          animate={{
-            background: [
-              'radial-gradient(circle at 0% 0%, hsl(var(--destructive)/0.3) 0%, transparent 50%)',
-              'radial-gradient(circle at 100% 0%, hsl(var(--destructive)/0.3) 0%, transparent 50%)',
-              'radial-gradient(circle at 100% 100%, hsl(var(--destructive)/0.3) 0%, transparent 50%)',
-              'radial-gradient(circle at 0% 100%, hsl(var(--destructive)/0.3) 0%, transparent 50%)',
-              'radial-gradient(circle at 0% 0%, hsl(var(--destructive)/0.3) 0%, transparent 50%)',
-            ]
-          }}
-          transition={{
-            duration: 15,
-            repeat: Infinity,
-            ease: "linear"
-          }}
-        />
-        
-        <div className="max-w-7xl mx-auto relative z-10">
-          <motion.h2
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="mb-12 md:mb-16 text-center"
-          >
-            Replace Your Patchwork Tools
-          </motion.h2>
-          
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            className="text-xl md:text-2xl text-muted-foreground leading-relaxed font-light mb-16 text-center max-w-4xl mx-auto"
-          >
-            Your team shouldn't have to juggle disconnected tools. We unify them into one elegant platform—designed for the way you actually work.
-          </motion.p>
-          
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4 gap-4 md:gap-6 max-w-5xl mx-auto">
-            {["Spreadsheets", "Notion", "WhatsApp", "Email", "Zapier", "Forms", "Manual Steps", "Disconnected Tools"].map((tool, i) => (
-              <motion.div
-                key={tool}
-                initial={{ opacity: 0, scale: 0.8 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                viewport={{ once: true, margin: "-50px" }}
-                transition={{ 
-                  duration: 0.4, 
-                  delay: i * 0.08,
-                  ease: [0.34, 1.56, 0.64, 1]
-                }}
-                className="relative group"
-              >
-                <div className="relative p-6 bg-card/80 backdrop-blur-sm rounded-2xl border-2 border-border/40 text-center overflow-hidden transition-all duration-300 hover:border-destructive/50">
-                  <motion.span 
-                    className="relative z-10 inline-block text-sm md:text-base"
-                    initial={{ opacity: 1 }}
-                    whileInView={{ opacity: 0.3 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.3, delay: i * 0.08 + 0.4 }}
-                  >
-                    {tool}
-                  </motion.span>
-                  
-                  {/* Animated X strike-through */}
-                  <motion.div
-                    className="absolute inset-0 flex items-center justify-center pointer-events-none"
-                    initial={{ scale: 0, rotate: 0 }}
-                    whileInView={{ scale: 1, rotate: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ 
-                      duration: 0.5, 
-                      delay: i * 0.08 + 0.4,
-                      ease: [0.68, -0.55, 0.265, 1.55]
-                    }}
-                  >
-                    <svg width="100%" height="100%" className="absolute inset-0">
-                      <motion.line
-                        x1="20%"
-                        y1="20%"
-                        x2="80%"
-                        y2="80%"
-                        stroke="hsl(var(--destructive))"
-                        strokeWidth="3"
-                        strokeLinecap="round"
-                        initial={{ pathLength: 0 }}
-                        whileInView={{ pathLength: 1 }}
-                        viewport={{ once: true }}
-                        transition={{ duration: 0.3, delay: i * 0.08 + 0.5 }}
-                        style={{
-                          filter: 'drop-shadow(0 0 8px hsl(var(--destructive)))'
-                        }}
-                      />
-                      <motion.line
-                        x1="80%"
-                        y1="20%"
-                        x2="20%"
-                        y2="80%"
-                        stroke="hsl(var(--destructive))"
-                        strokeWidth="3"
-                        strokeLinecap="round"
-                        initial={{ pathLength: 0 }}
-                        whileInView={{ pathLength: 1 }}
-                        viewport={{ once: true }}
-                        transition={{ duration: 0.3, delay: i * 0.08 + 0.5 }}
-                        style={{
-                          filter: 'drop-shadow(0 0 8px hsl(var(--destructive)))'
-                        }}
-                      />
-                    </svg>
-                  </motion.div>
-                </div>
-              </motion.div>
-            ))}
-          </div>
-          
-          {/* Arrow pointing down */}
-          <motion.div
-            initial={{ opacity: 0, y: -20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 1.2 }}
-            className="flex justify-center mt-16 mb-8"
-          >
-            <motion.div
-              animate={{ y: [0, 10, 0] }}
-              transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-            >
-              <svg width="48" height="48" viewBox="0 0 24 24" fill="none" className="text-primary">
-                <path d="M12 5V19M12 19L5 12M12 19L19 12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-              </svg>
-            </motion.div>
-          </motion.div>
-          
-          {/* One Platform */}
-          <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.7, delay: 1.4 }}
-            className="max-w-2xl mx-auto"
-          >
-            <div className="relative p-12 bg-gradient-to-br from-primary/20 to-secondary/20 backdrop-blur-sm rounded-3xl border-2 border-primary/50 text-center overflow-hidden">
-              <motion.div
-                className="absolute inset-0 bg-gradient-to-r from-primary/10 to-secondary/10"
-                animate={{
-                  scale: [1, 1.2, 1],
-                  opacity: [0.3, 0.6, 0.3],
-                }}
-                transition={{
-                  duration: 3,
-                  repeat: Infinity,
-                  ease: "easeInOut"
-                }}
-              />
-              <h3 className="text-3xl md:text-4xl font-light mb-4 relative z-10">One Platform</h3>
-              <p className="text-lg text-muted-foreground relative z-10">Built exactly for your workflow</p>
-            </div>
-          </motion.div>
-        </div>
-      </section>
+      <HeroSection />
 
       {/* What We Build */}
       <section className="py-24 md:py-32 px-6 lg:px-12 border-t border-border/50">

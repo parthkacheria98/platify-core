@@ -9,8 +9,44 @@ const app = express();
 const PORT = process.env.PORT || 3001;
 
 // Middleware
+const allowedOrigins = [
+  'http://localhost:8080',
+  'https://platify.cloud',
+  'https://www.platify.cloud'
+];
+
 app.use(cors({
-  origin: process.env.FRONTEND_URL || 'http://localhost:8080',
+  origin: (origin, callback) => {
+    // Allow requests with no origin (like mobile apps or curl requests) - but only from same server
+    if (!origin) {
+      // In production, be more restrictive
+      if (process.env.NODE_ENV === 'production') {
+        return callback(new Error('Not allowed by CORS'));
+      }
+      return callback(null, true);
+    }
+    
+    // Check against allowed origins
+    if (allowedOrigins.indexOf(origin) !== -1) {
+      callback(null, true);
+    } else if (process.env.FRONTEND_URL) {
+      // Allow the configured frontend URL and its www variant
+      const frontendUrl = process.env.FRONTEND_URL;
+      const wwwVariant = frontendUrl.replace(/^https?:\/\//, 'https://www.');
+      if (origin === frontendUrl || origin === wwwVariant) {
+        callback(null, true);
+      } else {
+        callback(new Error('Not allowed by CORS'));
+      }
+    } else {
+      // Development mode - allow localhost
+      if (origin.includes('localhost') || origin.includes('127.0.0.1')) {
+        callback(null, true);
+      } else {
+        callback(new Error('Not allowed by CORS'));
+      }
+    }
+  },
   credentials: true
 }));
 app.use(express.json());

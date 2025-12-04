@@ -165,10 +165,10 @@ const Contact = () => {
                     <div>
                       <p className="text-sm text-muted-foreground mb-2">Email</p>
                       <a
-                        href="mailto:build@platify.com"
+                        href="mailto:build@platify.cloud"
                         className="text-lg hover:text-muted-foreground transition-colors duration-300"
                       >
-                        build@platify.com
+                        build@platify.cloud
                       </a>
                     </div>
                     <div>

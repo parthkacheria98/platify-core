@@ -1,51 +1,88 @@
+import { useState, useEffect } from "react";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 
+interface Video {
+  id: string;
+  title: string;
+  description: string;
+  category: string;
+  thumbnail: string;
+  videoUrl: string;
+  published: boolean;
+}
+
 const Videos = () => {
-  const videos = [
-    {
-      id: "1",
-      title: "Order Management Platform",
-      description: "Complete order-to-delivery workflow with automated routing, approvals, and real-time tracking.",
-      thumbnail: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=80&w=800",
-      category: "Platform Demo",
-    },
-    {
-      id: "2",
-      title: "Custom Dashboard System",
-      description: "Executive dashboard showing real-time metrics, trends, and actionable insights across operations.",
-      thumbnail: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&q=80&w=800",
-      category: "Dashboard",
-    },
-    {
-      id: "3",
-      title: "Vendor Portal Interface",
-      description: "Secure portal enabling vendors to submit quotes, track orders, and manage documentation.",
-      thumbnail: "https://images.unsplash.com/photo-1553877522-43269d4ea984?auto=format&fit=crop&q=80&w=800",
-      category: "Portal",
-    },
-    {
-      id: "4",
-      title: "Approval Workflow Engine",
-      description: "Multi-stage approval system with conditional routing, notifications, and audit trails.",
-      thumbnail: "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&q=80&w=800",
-      category: "Automation",
-    },
-    {
-      id: "5",
-      title: "Inventory Management System",
-      description: "Real-time inventory tracking with automated reordering, location management, and reporting.",
-      thumbnail: "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&q=80&w=800",
-      category: "Operations",
-    },
-    {
-      id: "6",
-      title: "Client Communication Hub",
-      description: "Unified client portal for project updates, document sharing, and milestone tracking.",
-      thumbnail: "https://images.unsplash.com/photo-1542744173-8e7e53415bb0?auto=format&fit=crop&q=80&w=800",
-      category: "Portal",
-    },
-  ];
+  const [videos, setVideos] = useState<Video[]>([]);
+
+  useEffect(() => {
+    // Load videos from localStorage
+    const saved = localStorage.getItem("videos");
+    if (saved) {
+      const allVideos = JSON.parse(saved);
+      // Only show published videos
+      setVideos(allVideos.filter((v: Video) => v.published));
+    } else {
+      // Default videos if nothing in localStorage
+      const defaults: Video[] = [
+        {
+          id: "1",
+          title: "Order Management Platform",
+          description: "Complete order-to-delivery workflow with automated routing, approvals, and real-time tracking.",
+          category: "Platform Demo",
+          thumbnail: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=80&w=800",
+          videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
+          published: true,
+        },
+        {
+          id: "2",
+          title: "Custom Dashboard System",
+          description: "Executive dashboard showing real-time metrics, trends, and actionable insights across operations.",
+          category: "Dashboard",
+          thumbnail: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&q=80&w=800",
+          videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
+          published: true,
+        },
+        {
+          id: "3",
+          title: "Vendor Portal Interface",
+          description: "Secure portal enabling vendors to submit quotes, track orders, and manage documentation.",
+          category: "Portal",
+          thumbnail: "https://images.unsplash.com/photo-1553877522-43269d4ea984?auto=format&fit=crop&q=80&w=800",
+          videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
+          published: true,
+        },
+        {
+          id: "4",
+          title: "Approval Workflow Engine",
+          description: "Multi-stage approval system with conditional routing, notifications, and audit trails.",
+          category: "Automation",
+          thumbnail: "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&q=80&w=800",
+          videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
+          published: true,
+        },
+        {
+          id: "5",
+          title: "Inventory Management System",
+          description: "Real-time inventory tracking with automated reordering, location management, and reporting.",
+          category: "Operations",
+          thumbnail: "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&q=80&w=800",
+          videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
+          published: true,
+        },
+        {
+          id: "6",
+          title: "Client Communication Hub",
+          description: "Unified client portal for project updates, document sharing, and milestone tracking.",
+          category: "Portal",
+          thumbnail: "https://images.unsplash.com/photo-1542744173-8e7e53415bb0?auto=format&fit=crop&q=80&w=800",
+          videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
+          published: true,
+        },
+      ];
+      setVideos(defaults);
+    }
+  }, []);
 
   return (
     <div className="min-h-screen bg-background">
@@ -69,50 +106,64 @@ const Videos = () => {
       {/* Videos Grid */}
       <section className="pb-24 md:pb-32 px-6 lg:px-12">
         <div className="max-w-7xl mx-auto">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12 md:gap-16">
-            {videos.map((video, index) => (
-              <div
-                key={video.id}
-                className="group animate-fade-in-up cursor-pointer"
-                style={{ animationDelay: `${index * 0.1}s` }}
-              >
-                <div className="border border-border/50 overflow-hidden hover:border-primary transition-all duration-500">
-                  {/* Thumbnail */}
-                  <div className="relative aspect-video overflow-hidden bg-muted">
-                    <img
-                      src={video.thumbnail}
-                      alt={video.title}
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
-                    />
-                    
-                    {/* Play Icon Overlay */}
-                    <div className="absolute inset-0 flex items-center justify-center bg-foreground/0 group-hover:bg-foreground/10 transition-colors duration-500">
-                      <div className="w-16 h-16 rounded-full bg-primary/90 flex items-center justify-center group-hover:scale-110 transition-transform duration-500">
-                        <svg 
-                          className="w-6 h-6 text-white ml-1" 
-                          fill="currentColor" 
-                          viewBox="0 0 24 24"
-                        >
-                          <path d="M8 5v14l11-7z" />
-                        </svg>
+          {videos.length === 0 ? (
+            <div className="text-center py-24">
+              <p className="text-muted-foreground text-lg">No videos published yet.</p>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12 md:gap-16">
+              {videos.map((video, index) => (
+                <div
+                  key={video.id}
+                  className="group animate-fade-in-up cursor-pointer"
+                  style={{ animationDelay: `${index * 0.1}s` }}
+                >
+                  <div className="border border-border/50 overflow-hidden hover:border-primary transition-all duration-500">
+                    {/* Thumbnail */}
+                    <div className="relative aspect-video overflow-hidden bg-muted">
+                      {video.thumbnail ? (
+                        <img
+                          src={video.thumbnail}
+                          alt={video.title}
+                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                        />
+                      ) : (
+                        <div className="w-full h-full flex items-center justify-center text-muted-foreground">
+                          No thumbnail
+                        </div>
+                      )}
+                      
+                      {/* Play Icon Overlay */}
+                      <div className="absolute inset-0 flex items-center justify-center bg-foreground/0 group-hover:bg-foreground/10 transition-colors duration-500">
+                        <div className="w-16 h-16 rounded-full bg-primary/90 flex items-center justify-center group-hover:scale-110 transition-transform duration-500">
+                          <svg 
+                            className="w-6 h-6 text-white ml-1" 
+                            fill="currentColor" 
+                            viewBox="0 0 24 24"
+                          >
+                            <path d="M8 5v14l11-7z" />
+                          </svg>
+                        </div>
                       </div>
                     </div>
-                  </div>
 
-                  {/* Content */}
-                  <div className="p-6">
-                    <div className="text-xs text-muted-foreground mb-3">{video.category}</div>
-                    <h4 className="mb-3 group-hover:text-primary transition-colors duration-500">
-                      {video.title}
-                    </h4>
-                    <p className="text-sm text-muted-foreground leading-relaxed">
-                      {video.description}
-                    </p>
+                    {/* Content */}
+                    <div className="p-6">
+                      <div className="text-xs text-muted-foreground mb-3">{video.category}</div>
+                      <h4 className="mb-3 group-hover:text-primary transition-colors duration-500">
+                        {video.title}
+                      </h4>
+                      {video.description && (
+                        <p className="text-sm text-muted-foreground leading-relaxed">
+                          {video.description}
+                        </p>
+                      )}
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
+          )}
         </div>
       </section>
 
