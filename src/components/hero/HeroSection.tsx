@@ -30,6 +30,7 @@ interface FragmentConfig {
   animation: "float-slow" | "float-medium" | "float-fast";
   layer: "foreground" | "midground" | "background";
   hideOnMobile?: boolean;
+  size?: string; // Custom Tailwind size classes (e.g., "w-48 md:w-64 lg:w-80")
 }
 
 const animationClasses = {
@@ -70,6 +71,7 @@ const fragments: FragmentConfig[] = [
     id: "calendar-1",
     imagePath: "/hero-fragments/slack1.png",
     imageAlt: "Slack fragment",
+    size: "w-96 md:w-[384px] lg:w-[480px]", // 2x larger size
     position: { top: "8%", left: "50%", right: "auto" },
     mobilePosition: { top: "3%", left: "10%" },
     rotation: 3,
@@ -274,12 +276,12 @@ export const HeroSection: React.FC = () => {
           ? fragment.mobilePosition
           : fragment.position;
 
-        // Calculate parallax offset
+        // Calculate parallax offset - reduced intensity for smoother animation
         const parallaxX = isHovering && !isMobile
-          ? mousePosition.x * layer.parallax * 30
+          ? mousePosition.x * layer.parallax * 15
           : 0;
         const parallaxY = isHovering && !isMobile
-          ? mousePosition.y * layer.parallax * 30
+          ? mousePosition.y * layer.parallax * 15
           : 0;
 
         return (
@@ -289,34 +291,46 @@ export const HeroSection: React.FC = () => {
             style={{
               ...position,
               zIndex: layer.zIndex,
-              transform: `translate(${parallaxX}px, ${parallaxY}px)`,
               filter: layer.blur > 0 ? `blur(${layer.blur}px)` : undefined,
               opacity: layer.opacity,
-              transition: "transform 0.3s ease-out, opacity 0.3s ease-out",
+              // Remove transition from here to avoid animation conflicts
             }}
           >
+            {/* Parallax wrapper - separate from animation */}
             <div
               style={{
-                transform: `rotate(${fragment.rotation}deg) scale(${layer.scale})`,
+                transform: `translate3d(${parallaxX}px, ${parallaxY}px, 0)`,
+                transition: "transform 0.15s ease-out",
+                willChange: "transform",
               }}
             >
+              {/* Rotation and scale wrapper */}
               <div
-                className={animationClasses[fragment.animation]}
                 style={{
-                  animationDelay: `${fragment.delay}s`,
+                  transform: `rotate(${fragment.rotation}deg) scale(${layer.scale})`,
+                  willChange: "transform",
                 }}
               >
+                {/* Animation wrapper */}
+                <div
+                  className={animationClasses[fragment.animation]}
+                  style={{
+                    animationDelay: `${fragment.delay}s`,
+                    willChange: "transform",
+                  }}
+                >
                 {fragment.imagePath ? (
                   <ImageFragment
                     src={fragment.imagePath}
                     alt={fragment.imageAlt || fragment.id}
-                    className="w-32 md:w-40 lg:w-48"
+                    className={fragment.size || "w-32 md:w-40 lg:w-48"}
                   />
                 ) : fragment.component ? (
                   <fragment.component
-                    className="w-32 md:w-40 lg:w-48"
+                    className={fragment.size || "w-32 md:w-40 lg:w-48"}
                   />
                 ) : null}
+                </div>
               </div>
             </div>
           </div>
