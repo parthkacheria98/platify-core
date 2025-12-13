@@ -12,6 +12,7 @@ dotenv.config();
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const BLOG_POSTS_FILE = path.join(__dirname, 'blogPosts.json');
+const CASE_STUDIES_FILE = path.join(__dirname, 'caseStudies.json');
 
 const app = express();
 const PORT = process.env.PORT || 3010;
@@ -85,6 +86,31 @@ const writeBlogPosts = (posts) => {
     return true;
   } catch (error) {
     console.error('Error writing blog posts:', error);
+    return false;
+  }
+};
+
+// Helper function to read case studies from JSON file
+const readCaseStudies = () => {
+  try {
+    if (fs.existsSync(CASE_STUDIES_FILE)) {
+      const data = fs.readFileSync(CASE_STUDIES_FILE, 'utf8');
+      return JSON.parse(data);
+    }
+    return [];
+  } catch (error) {
+    console.error('Error reading case studies:', error);
+    return [];
+  }
+};
+
+// Helper function to write case studies to JSON file
+const writeCaseStudies = (cases) => {
+  try {
+    fs.writeFileSync(CASE_STUDIES_FILE, JSON.stringify(cases, null, 2), 'utf8');
+    return true;
+  } catch (error) {
+    console.error('Error writing case studies:', error);
     return false;
   }
 };
@@ -221,6 +247,150 @@ app.delete('/api/blog/posts/:id', (req, res) => {
   } catch (error) {
     console.error('Error deleting blog post:', error);
     res.status(500).json({ error: 'Failed to delete blog post' });
+  }
+});
+
+// Case Studies endpoints
+// GET /api/case-studies - Get all case studies
+app.get('/api/case-studies', (req, res) => {
+  try {
+    const cases = readCaseStudies();
+    // Filter by published status if query param is provided
+    const publishedOnly = req.query.published === 'true';
+    const filteredCases = publishedOnly 
+      ? cases.filter(c => c.published === true)
+      : cases;
+    res.json({ success: true, data: filteredCases });
+  } catch (error) {
+    console.error('Error fetching case studies:', error);
+    res.status(500).json({ error: 'Failed to fetch case studies' });
+  }
+});
+
+// GET /api/case-studies/:slug - Get a single case study by slug
+app.get('/api/case-studies/:slug', (req, res) => {
+  try {
+    const cases = readCaseStudies();
+    const caseStudy = cases.find(c => c.slug === req.params.slug && c.published === true);
+    if (caseStudy) {
+      res.json({ success: true, data: caseStudy });
+    } else {
+      res.status(404).json({ error: 'Case study not found' });
+    }
+  } catch (error) {
+    console.error('Error fetching case study:', error);
+    res.status(500).json({ error: 'Failed to fetch case study' });
+  }
+});
+
+// POST /api/case-studies - Create a new case study
+app.post('/api/case-studies', (req, res) => {
+  try {
+    const cases = readCaseStudies();
+    const newCase = req.body;
+
+    // Validate required fields
+    if (!newCase.title || !newCase.slug || !newCase.client || !newCase.industry) {
+      return res.status(400).json({ 
+        error: 'Missing required fields: title, slug, client, and industry are required' 
+      });
+    }
+
+    // Check if case study with same id exists (for updates)
+    const existingIndex = cases.findIndex(c => c.id === newCase.id);
+    
+    if (existingIndex !== -1) {
+      // Update existing case study
+      cases[existingIndex] = { ...cases[existingIndex], ...newCase };
+    } else {
+      // Create new case study
+      if (!newCase.id) {
+        newCase.id = Date.now().toString();
+      }
+      // Ensure impact is an array
+      if (typeof newCase.impact === 'string') {
+        newCase.impact = newCase.impact.split('\n').map(line => line.trim()).filter(line => line.length > 0);
+      }
+      cases.push(newCase);
+    }
+
+    // Write to file
+    if (writeCaseStudies(cases)) {
+      res.json({ 
+        success: true, 
+        message: existingIndex !== -1 ? 'Case study updated successfully' : 'Case study created successfully',
+        data: existingIndex !== -1 ? cases[existingIndex] : newCase
+      });
+    } else {
+      res.status(500).json({ error: 'Failed to save case study' });
+    }
+  } catch (error) {
+    console.error('Error saving case study:', error);
+    res.status(500).json({ error: 'Failed to save case study' });
+  }
+});
+
+// PUT /api/case-studies/:id - Update a specific case study
+app.put('/api/case-studies/:id', (req, res) => {
+  try {
+    const cases = readCaseStudies();
+    const caseId = req.params.id;
+    const updatedCase = req.body;
+
+    const existingIndex = cases.findIndex(c => c.id === caseId);
+    
+    if (existingIndex === -1) {
+      return res.status(404).json({ error: 'Case study not found' });
+    }
+
+    // Ensure impact is an array
+    if (typeof updatedCase.impact === 'string') {
+      updatedCase.impact = updatedCase.impact.split('\n').map(line => line.trim()).filter(line => line.length > 0);
+    }
+
+    // Update the case study
+    cases[existingIndex] = { ...cases[existingIndex], ...updatedCase, id: caseId };
+
+    // Write to file
+    if (writeCaseStudies(cases)) {
+      res.json({ 
+        success: true, 
+        message: 'Case study updated successfully',
+        data: cases[existingIndex]
+      });
+    } else {
+      res.status(500).json({ error: 'Failed to update case study' });
+    }
+  } catch (error) {
+    console.error('Error updating case study:', error);
+    res.status(500).json({ error: 'Failed to update case study' });
+  }
+});
+
+// DELETE /api/case-studies/:id - Delete a case study
+app.delete('/api/case-studies/:id', (req, res) => {
+  try {
+    const cases = readCaseStudies();
+    const caseId = req.params.id;
+
+    const filteredCases = cases.filter(c => c.id !== caseId);
+
+    if (filteredCases.length === cases.length) {
+      return res.status(404).json({ error: 'Case study not found' });
+    }
+
+    // Write to file
+    if (writeCaseStudies(filteredCases)) {
+      res.json({ 
+        success: true, 
+        message: 'Case study deleted successfully'
+      });
+    } else {
+      res.status(500).json({ error: 'Failed to delete case study' });
+    }
+  } catch (error) {
+    console.error('Error deleting case study:', error);
+    res.status(500).json({ error: 'Failed to delete case study' });
   }
 });
 

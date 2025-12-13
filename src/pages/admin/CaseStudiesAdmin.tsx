@@ -38,77 +38,29 @@ const CaseStudiesAdmin = () => {
   });
 
   useEffect(() => {
-    // Load cases from localStorage
-    const saved = localStorage.getItem("caseStudies");
-    if (saved) {
-      setCases(JSON.parse(saved));
-    } else {
-      // Default cases
-      const defaults: CaseStudy[] = [
-        {
-          id: "1",
-          client: "Heritage Jewellery House",
-          industry: "Luxury Jewellery",
-          title: "Unifying a $20M Jewellery Operation",
-          slug: "luxury-jewellery-operations",
-          problem: "Orders tracked in spreadsheets, inventory managed offline, vendor communication via WhatsApp, and zero visibility across the business.",
-          solution: "Complete custom platform integrating order management, inventory tracking, vendor portals, and real-time dashboards.",
-          impact: ["60% faster order processing", "Zero inventory discrepancies", "Complete workflow visibility"],
-          image: "https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?auto=format&fit=crop&q=80&w=1200",
-          videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
-          published: true,
-        },
-        {
-          id: "2",
-          client: "Precision Manufacturing Co.",
-          industry: "Manufacturing",
-          title: "Transforming Shop Floor to Boardroom",
-          slug: "manufacturing-workflow-system",
-          problem: "Production data scattered across Notion, Excel, and paper. No real-time visibility into capacity, bottlenecks, or delivery timelines.",
-          solution: "End-to-end manufacturing platform with shop floor data capture, automated routing, client portals, and executive dashboards.",
-          impact: ["40% reduction in production delays", "Real-time capacity planning", "Automated client updates"],
-          image: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&q=80&w=1200",
-          videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
-          published: true,
-        },
-        {
-          id: "3",
-          client: "Premium D2C Brand",
-          industry: "E-commerce",
-          title: "Building Operational Intelligence for Scale",
-          slug: "d2c-brand-operations",
-          problem: "Rapid growth exposed cracks: customer data in Shopify, operations in Notion, fulfillment via email threads, and reporting through manual exports.",
-          solution: "Unified operations platform connecting e-commerce, fulfillment, customer service, and analytics with intelligent automation.",
-          impact: ["3x order volume with same team", "Sub-24hr fulfillment time", "Single source of truth"],
-          image: "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?auto=format&fit=crop&q=80&w=1200",
-          videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
-          published: true,
-        },
-        {
-          id: "4",
-          client: "Multi-Generational Family Office",
-          industry: "Family Business",
-          title: "Institutionalizing Family Business Operations",
-          slug: "family-office-platform",
-          problem: "Five business units, each with their own systems, reporting, and workflows. Leadership had no unified view of performance or operations.",
-          solution: "Cross-entity platform with consolidated reporting, approval workflows, document management, and strategic dashboards.",
-          impact: ["Unified operational view", "Faster decision-making", "Institutional-grade governance"],
-          image: "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&q=80&w=1200",
-          videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
-          published: true,
-        },
-      ];
-      setCases(defaults);
-      localStorage.setItem("caseStudies", JSON.stringify(defaults));
-    }
+    // Fetch case studies from API
+    const fetchCases = async () => {
+      try {
+        const response = await fetch('/api/case-studies');
+        if (!response.ok) {
+          throw new Error('Failed to fetch case studies');
+        }
+        const result = await response.json();
+        if (result.success && result.data) {
+          setCases(result.data);
+        } else {
+          setCases([]);
+        }
+      } catch (error) {
+        console.error('Error fetching case studies:', error);
+        setCases([]);
+      }
+    };
+
+    fetchCases();
   }, []);
 
-  const saveCases = (newCases: CaseStudy[]) => {
-    setCases(newCases);
-    localStorage.setItem("caseStudies", JSON.stringify(newCases));
-  };
-
-  const handleSubmit = (e: React.FormEvent, publish: boolean) => {
+  const handleSubmit = async (e: React.FormEvent, publish: boolean) => {
     e.preventDefault();
     
     if (!formData.title || !formData.slug || !formData.client || !formData.industry) {
@@ -121,28 +73,68 @@ const CaseStudiesAdmin = () => {
       .map(line => line.trim())
       .filter(line => line.length > 0);
 
-    if (editingId) {
-      const updated = cases.map((c) =>
-        c.id === editingId 
-          ? { 
-              ...c, 
-              ...formData, 
-              impact: impactArray,
-              published: publish ? true : c.published 
-            }
-          : c
-      );
-      saveCases(updated);
-      toast.success("Case study updated successfully");
-    } else {
-      const newCase: CaseStudy = {
-        id: Date.now().toString(),
-        ...formData,
-        impact: impactArray,
-        published: publish,
-      };
-      saveCases([...cases, newCase]);
-      toast.success(publish ? "Case study published successfully" : "Case study saved as draft");
+    try {
+      if (editingId) {
+        // Update existing case study
+        const updatedCase = {
+          ...formData,
+          impact: impactArray,
+          published: publish ? true : formData.published,
+        };
+        
+        const response = await fetch(`/api/case-studies/${editingId}`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(updatedCase),
+        });
+
+        if (!response.ok) {
+          throw new Error('Failed to update case study');
+        }
+
+        const result = await response.json();
+        if (result.success) {
+          // Update local state
+          const updated = cases.map((c) =>
+            c.id === editingId ? result.data : c
+          );
+          setCases(updated);
+          toast.success("Case study updated successfully");
+        }
+      } else {
+        // Create new case study
+        const newCase: CaseStudy = {
+          id: Date.now().toString(),
+          ...formData,
+          impact: impactArray,
+          published: publish,
+        };
+        
+        const response = await fetch('/api/case-studies', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(newCase),
+        });
+
+        if (!response.ok) {
+          throw new Error('Failed to create case study');
+        }
+
+        const result = await response.json();
+        if (result.success) {
+          // Update local state
+          setCases([...cases, result.data]);
+          toast.success(publish ? "Case study published successfully" : "Case study saved as draft");
+        }
+      }
+    } catch (error) {
+      console.error('Error saving case study:', error);
+      toast.error("Failed to save case study. Please try again.");
+      return;
     }
 
     resetForm();
@@ -165,11 +157,30 @@ const CaseStudiesAdmin = () => {
     setShowForm(true);
   };
 
-  const handleDelete = (id: string) => {
-    if (confirm("Are you sure you want to delete this case study?")) {
-      const updated = cases.filter((c) => c.id !== id);
-      saveCases(updated);
-      toast.success("Case study deleted successfully");
+  const handleDelete = async (id: string) => {
+    if (!confirm("Are you sure you want to delete this case study?")) {
+      return;
+    }
+
+    try {
+      const response = await fetch(`/api/case-studies/${id}`, {
+        method: 'DELETE',
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to delete case study');
+      }
+
+      const result = await response.json();
+      if (result.success) {
+        // Update local state
+        const updated = cases.filter((c) => c.id !== id);
+        setCases(updated);
+        toast.success("Case study deleted successfully");
+      }
+    } catch (error) {
+      console.error('Error deleting case study:', error);
+      toast.error("Failed to delete case study. Please try again.");
     }
   };
 
