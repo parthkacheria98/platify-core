@@ -41,7 +41,7 @@ export const GlassCard: React.FC = () => {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6, delay: 0.3 }}
-          className="text-base md:text-lg lg:text-xl text-muted-foreground leading-relaxed font-light mb-8 md:mb-10 text-center max-w-xl mx-auto"
+          className="text-base md:text-lg lg:text-xl text-foreground leading-relaxed font-light mb-8 md:mb-10 text-center max-w-xl mx-auto"
         >
           Replace Sheets + Slack + Notion + Zapier + n8n with ONE platform built for how your team actually works.
         </motion.p>
