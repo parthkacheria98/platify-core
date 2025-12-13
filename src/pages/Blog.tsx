@@ -17,86 +17,32 @@ interface BlogPost {
 
 const Blog = () => {
   const [posts, setPosts] = useState<BlogPost[]>([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Load posts from localStorage
-    const saved = localStorage.getItem("blogPosts");
-    if (saved) {
-      const allPosts = JSON.parse(saved);
-      // Only show published posts
-      setPosts(allPosts.filter((p: BlogPost) => p.published));
-    } else {
-      // Default posts if nothing in localStorage
-      const defaults: BlogPost[] = [
-        {
-          id: "1",
-          title: "The Cost of Operational Chaos",
-          slug: "operational-clarity",
-          excerpt: "Every spreadsheet, every Notion page, every scattered email trail—they all compound into something far more expensive than you realize.",
-          category: "Operations",
-          date: "2024-03-15",
-          readTime: "8 min read",
-          content: "",
-          published: true,
-        },
-        {
-          id: "2",
-          title: "Systems Over Solutions",
-          slug: "systems-thinking",
-          excerpt: "Most businesses don't need another tool. They need one system that reflects how they actually work.",
-          category: "Strategy",
-          date: "2024-03-10",
-          readTime: "6 min read",
-          content: "",
-          published: true,
-        },
-        {
-          id: "3",
-          title: "Redesigning Workflows for Scale",
-          slug: "workflow-redesign",
-          excerpt: "The workflows that got you here won't get you there. Here's how we approach workflow transformation.",
-          category: "Process",
-          date: "2024-03-05",
-          readTime: "10 min read",
-          content: "",
-          published: true,
-        },
-        {
-          id: "4",
-          title: "Why Bespoke Still Matters",
-          slug: "bespoke-engineering",
-          excerpt: "In a world of templates and low-code tools, custom engineering delivers clarity, control, and competitive advantage.",
-          category: "Engineering",
-          date: "2024-02-28",
-          readTime: "7 min read",
-          content: "",
-          published: true,
-        },
-        {
-          id: "5",
-          title: "Building Systems for Family Businesses",
-          slug: "family-business-platforms",
-          excerpt: "Family businesses operate differently. Their systems should reflect that nuance and long-term thinking.",
-          category: "Industry",
-          date: "2024-02-20",
-          readTime: "9 min read",
-          content: "",
-          published: true,
-        },
-        {
-          id: "6",
-          title: "The Art of Dashboard Design",
-          slug: "dashboard-design",
-          excerpt: "A dashboard should answer questions before they're asked. Here's our approach to intelligent information design.",
-          category: "Design",
-          date: "2024-02-15",
-          readTime: "6 min read",
-          content: "",
-          published: true,
-        },
-      ];
-      setPosts(defaults);
-    }
+    // Fetch posts from API
+    const fetchPosts = async () => {
+      try {
+        setLoading(true);
+        const response = await fetch('/api/blog/posts?published=true');
+        if (!response.ok) {
+          throw new Error('Failed to fetch blog posts');
+        }
+        const result = await response.json();
+        if (result.success && result.data) {
+          setPosts(result.data);
+        } else {
+          setPosts([]);
+        }
+      } catch (error) {
+        console.error('Error fetching blog posts:', error);
+        setPosts([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchPosts();
   }, []);
 
   return (
@@ -121,7 +67,11 @@ const Blog = () => {
       {/* Blog Grid */}
       <section className="pb-24 md:pb-32 px-6 lg:px-12">
         <div className="max-w-7xl mx-auto">
-          {posts.length === 0 ? (
+          {loading ? (
+            <div className="text-center py-24">
+              <p className="text-muted-foreground text-lg">Loading insights...</p>
+            </div>
+          ) : posts.length === 0 ? (
             <div className="text-center py-24">
               <p className="text-muted-foreground text-lg">No insights published yet.</p>
             </div>

@@ -22,23 +22,35 @@ const BlogPost = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Load post from localStorage
-    const saved = localStorage.getItem("blogPosts");
-    if (saved) {
-      const allPosts: BlogPost[] = JSON.parse(saved);
-      const foundPost = allPosts.find((p) => p.slug === slug && p.published);
-      
-      if (foundPost) {
-        setPost(foundPost);
-      } else {
-        // Post not found or not published
+    // Fetch post from API
+    const fetchPost = async () => {
+      try {
+        setLoading(true);
+        const response = await fetch(`/api/blog/posts/${slug}`);
+        if (!response.ok) {
+          if (response.status === 404) {
+            navigate("/blog");
+            return;
+          }
+          throw new Error('Failed to fetch blog post');
+        }
+        const result = await response.json();
+        if (result.success && result.data) {
+          setPost(result.data);
+        } else {
+          navigate("/blog");
+        }
+      } catch (error) {
+        console.error('Error fetching blog post:', error);
         navigate("/blog");
+      } finally {
+        setLoading(false);
       }
-    } else {
-      // No posts in localStorage, redirect to blog
-      navigate("/blog");
+    };
+
+    if (slug) {
+      fetchPost();
     }
-    setLoading(false);
   }, [slug, navigate]);
 
   if (loading) {

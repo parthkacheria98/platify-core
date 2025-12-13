@@ -34,91 +34,29 @@ const BlogAdmin = () => {
   });
 
   useEffect(() => {
-    // Load posts from localStorage
-    const saved = localStorage.getItem("blogPosts");
-    if (saved) {
-      setPosts(JSON.parse(saved));
-    } else {
-      // Default posts
-      const defaults: BlogPost[] = [
-        {
-          id: "1",
-          title: "The Cost of Operational Chaos",
-          slug: "operational-clarity",
-          excerpt: "Every spreadsheet, every Notion page, every scattered email trail—they all compound into something far more expensive than you realize.",
-          category: "Operations",
-          date: "2024-03-15",
-          readTime: "8 min read",
-          content: "",
-          published: true,
-        },
-        {
-          id: "2",
-          title: "Systems Over Solutions",
-          slug: "systems-thinking",
-          excerpt: "Most businesses don't need another tool. They need one system that reflects how they actually work.",
-          category: "Strategy",
-          date: "2024-03-10",
-          readTime: "6 min read",
-          content: "",
-          published: true,
-        },
-        {
-          id: "3",
-          title: "Redesigning Workflows for Scale",
-          slug: "workflow-redesign",
-          excerpt: "The workflows that got you here won't get you there. Here's how we approach workflow transformation.",
-          category: "Process",
-          date: "2024-03-05",
-          readTime: "10 min read",
-          content: "",
-          published: true,
-        },
-        {
-          id: "4",
-          title: "Why Bespoke Still Matters",
-          slug: "bespoke-engineering",
-          excerpt: "In a world of templates and low-code tools, custom engineering delivers clarity, control, and competitive advantage.",
-          category: "Engineering",
-          date: "2024-02-28",
-          readTime: "7 min read",
-          content: "",
-          published: true,
-        },
-        {
-          id: "5",
-          title: "Building Systems for Family Businesses",
-          slug: "family-business-platforms",
-          excerpt: "Family businesses operate differently. Their systems should reflect that nuance and long-term thinking.",
-          category: "Industry",
-          date: "2024-02-20",
-          readTime: "9 min read",
-          content: "",
-          published: true,
-        },
-        {
-          id: "6",
-          title: "The Art of Dashboard Design",
-          slug: "dashboard-design",
-          excerpt: "A dashboard should answer questions before they're asked. Here's our approach to intelligent information design.",
-          category: "Design",
-          date: "2024-02-15",
-          readTime: "6 min read",
-          content: "",
-          published: true,
-        },
-      ];
-      setPosts(defaults);
-      localStorage.setItem("blogPosts", JSON.stringify(defaults));
-    }
+    // Fetch posts from API
+    const fetchPosts = async () => {
+      try {
+        const response = await fetch('/api/blog/posts');
+        if (!response.ok) {
+          throw new Error('Failed to fetch blog posts');
+        }
+        const result = await response.json();
+        if (result.success && result.data) {
+          setPosts(result.data);
+        } else {
+          setPosts([]);
+        }
+      } catch (error) {
+        console.error('Error fetching blog posts:', error);
+        setPosts([]);
+      }
+    };
+
+    fetchPosts();
   }, []);
 
-  const savePosts = (newPosts: BlogPost[]) => {
-    setPosts(newPosts);
-    localStorage.setItem("blogPosts", JSON.stringify(newPosts));
-  };
-
-  const handleSubmit = (e: React.FormEvent, publish: boolean) => {
+  const handleSubmit = async (e: React.FormEvent, publish: boolean) => {
     e.preventDefault();
     
     if (!formData.title || !formData.slug || !formData.excerpt) {
@@ -126,22 +64,66 @@ const BlogAdmin = () => {
       return;
     }
 
-    if (editingId) {
-      const updated = posts.map((p) =>
-        p.id === editingId 
-          ? { ...p, ...formData, published: publish ? true : p.published }
-          : p
-      );
-      savePosts(updated);
-      toast.success("Post updated successfully");
-    } else {
-      const newPost: BlogPost = {
-        id: Date.now().toString(),
-        ...formData,
-        published: publish,
-      };
-      savePosts([...posts, newPost]);
-      toast.success(publish ? "Post published successfully" : "Post saved as draft");
+    try {
+      if (editingId) {
+        // Update existing post
+        const updatedPost = {
+          ...formData,
+          published: publish ? true : formData.published,
+        };
+        
+        const response = await fetch(`/api/blog/posts/${editingId}`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(updatedPost),
+        });
+
+        if (!response.ok) {
+          throw new Error('Failed to update post');
+        }
+
+        const result = await response.json();
+        if (result.success) {
+          // Update local state
+          const updated = posts.map((p) =>
+            p.id === editingId ? result.data : p
+          );
+          setPosts(updated);
+          toast.success("Post updated successfully");
+        }
+      } else {
+        // Create new post
+        const newPost: BlogPost = {
+          id: Date.now().toString(),
+          ...formData,
+          published: publish,
+        };
+        
+        const response = await fetch('/api/blog/posts', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(newPost),
+        });
+
+        if (!response.ok) {
+          throw new Error('Failed to create post');
+        }
+
+        const result = await response.json();
+        if (result.success) {
+          // Update local state
+          setPosts([...posts, result.data]);
+          toast.success(publish ? "Post published successfully" : "Post saved as draft");
+        }
+      }
+    } catch (error) {
+      console.error('Error saving post:', error);
+      toast.error("Failed to save post. Please try again.");
+      return;
     }
 
     resetForm();
@@ -162,11 +144,30 @@ const BlogAdmin = () => {
     setShowForm(true);
   };
 
-  const handleDelete = (id: string) => {
-    if (confirm("Are you sure you want to delete this post?")) {
-      const updated = posts.filter((p) => p.id !== id);
-      savePosts(updated);
-      toast.success("Post deleted successfully");
+  const handleDelete = async (id: string) => {
+    if (!confirm("Are you sure you want to delete this post?")) {
+      return;
+    }
+
+    try {
+      const response = await fetch(`/api/blog/posts/${id}`, {
+        method: 'DELETE',
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to delete post');
+      }
+
+      const result = await response.json();
+      if (result.success) {
+        // Update local state
+        const updated = posts.filter((p) => p.id !== id);
+        setPosts(updated);
+        toast.success("Post deleted successfully");
+      }
+    } catch (error) {
+      console.error('Error deleting post:', error);
+      toast.error("Failed to delete post. Please try again.");
     }
   };
 
