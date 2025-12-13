@@ -31,7 +31,7 @@ export const GlassCard: React.FC = () => {
           transition={{ duration: 0.6, delay: 0.2 }}
           className="text-3xl md:text-4xl lg:text-5xl font-light mb-4 md:mb-6 text-center"
         >
-          <span className="bg-gradient-to-r from-foreground via-foreground to-foreground/70 bg-clip-text text-transparent">
+          <span className="bg-gradient-to-r from-foreground via-foreground to-foreground/70 bg-clip-text text-foreground">
             Stop juggling 10 tools.
           </span>
         </motion.h2>
