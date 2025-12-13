@@ -173,6 +173,131 @@ Delete a blog post.
 }
 ```
 
+### Case Studies
+
+#### GET /api/case-studies
+
+Get all case studies. Optionally filter by published status.
+
+**Query Parameters:**
+- `published` (optional): Set to `"true"` to only get published case studies
+
+**Response:**
+```json
+{
+  "success": true,
+  "data": [
+    {
+      "id": "1",
+      "client": "Heritage Jewellery House",
+      "industry": "Luxury Jewellery",
+      "title": "Unifying a $20M Jewellery Operation",
+      "slug": "luxury-jewellery-operations",
+      "problem": "Orders tracked in spreadsheets...",
+      "solution": "Complete custom platform...",
+      "impact": ["60% faster order processing", "Zero inventory discrepancies"],
+      "image": "https://...",
+      "videoUrl": "https://www.youtube.com/embed/...",
+      "published": true
+    }
+  ]
+}
+```
+
+#### GET /api/case-studies/:slug
+
+Get a single case study by slug.
+
+**Response:**
+```json
+{
+  "success": true,
+  "data": {
+    "id": "1",
+    "client": "Heritage Jewellery House",
+    "industry": "Luxury Jewellery",
+    "title": "Unifying a $20M Jewellery Operation",
+    "slug": "luxury-jewellery-operations",
+    "problem": "Orders tracked in spreadsheets...",
+    "solution": "Complete custom platform...",
+    "impact": ["60% faster order processing"],
+    "image": "https://...",
+    "videoUrl": "https://www.youtube.com/embed/...",
+    "published": true
+  }
+}
+```
+
+#### POST /api/case-studies
+
+Create a new case study.
+
+**Request Body:**
+```json
+{
+  "client": "Company Name",
+  "industry": "Industry",
+  "title": "Case Study Title",
+  "slug": "case-study-slug",
+  "problem": "The problem description...",
+  "solution": "The solution description...",
+  "impact": ["Impact 1", "Impact 2"],
+  "image": "https://...",
+  "videoUrl": "https://www.youtube.com/embed/...",
+  "published": true
+}
+```
+
+**Response:**
+```json
+{
+  "success": true,
+  "message": "Case study created successfully",
+  "data": { /* created case study */ }
+}
+```
+
+#### PUT /api/case-studies/:id
+
+Update an existing case study.
+
+**Request Body:**
+```json
+{
+  "client": "Updated Company Name",
+  "industry": "Updated Industry",
+  "title": "Updated Title",
+  "slug": "updated-slug",
+  "problem": "Updated problem...",
+  "solution": "Updated solution...",
+  "impact": ["Updated impact"],
+  "image": "https://...",
+  "videoUrl": "https://www.youtube.com/embed/...",
+  "published": true
+}
+```
+
+**Response:**
+```json
+{
+  "success": true,
+  "message": "Case study updated successfully",
+  "data": { /* updated case study */ }
+}
+```
+
+#### DELETE /api/case-studies/:id
+
+Delete a case study.
+
+**Response:**
+```json
+{
+  "success": true,
+  "message": "Case study deleted successfully"
+}
+```
+
 ## Security
 
 - All credentials are stored in `.env` file which is gitignored
