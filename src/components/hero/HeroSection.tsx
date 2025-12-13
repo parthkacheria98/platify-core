@@ -71,13 +71,25 @@ const fragments: FragmentConfig[] = [
     id: "calendar-1",
     imagePath: "/hero-fragments/slack1.png",
     imageAlt: "Slack fragment",
-    size: "w-96 md:w-[384px] lg:w-[480px]", // 2x larger size
-    position: { top: "8%", left: "50%", right: "auto" },
-    mobilePosition: { top: "3%", left: "10%" },
+    size: "w-[280px] md:w-[280px] lg:w-[350px]", // Reduced to ~50% of original (569px)
+    position: { top: "10%", left: "8%", right: "auto" },
+    mobilePosition: { top: "5%", left: "10%" },
     rotation: 3,
     delay: 0.2,
     animation: "float-medium",
     layer: "midground",
+  },
+  {
+    id: "api-how",
+    imagePath: "/hero-fragments/api how.png",
+    imageAlt: "API how fragment",
+    size: "w-[340px] md:w-[340px] lg:w-[425px]", // Reduced to ~50% of original (684px)
+    position: { top: "12%", right: "10%", left: "auto" },
+    mobilePosition: { top: "8%", right: "5%" },
+    rotation: -4,
+    delay: 0.3,
+    animation: "float-fast",
+    layer: "foreground",
   },
   {
     id: "notification-1",
@@ -90,6 +102,18 @@ const fragments: FragmentConfig[] = [
     layer: "foreground",
   },
   {
+    id: "trello",
+    imagePath: "/hero-fragments/trello.png",
+    imageAlt: "Trello fragment",
+    size: "w-[535px] md:w-[535px] lg:w-[670px]", // Reduced to ~50% of original (1070px)
+    position: { top: "55%", left: "5%", right: "auto" },
+    mobilePosition: { bottom: "30%", left: "5%" },
+    rotation: 5,
+    delay: 0.5,
+    animation: "float-slow",
+    layer: "midground",
+  },
+  {
     id: "task-1",
     component: TaskFragment,
     position: { top: "50%", right: "12%" },
@@ -98,6 +122,18 @@ const fragments: FragmentConfig[] = [
     delay: 0.6,
     animation: "float-slow",
     layer: "midground",
+  },
+  {
+    id: "zap",
+    imagePath: "/hero-fragments/zap.png",
+    imageAlt: "Zap fragment",
+    size: "w-[410px] md:w-[410px] lg:w-[515px]", // Reduced to ~50% of original (827px)
+    position: { bottom: "20%", right: "8%", left: "auto" },
+    mobilePosition: { bottom: "18%", right: "8%" },
+    rotation: -3,
+    delay: 0.7,
+    animation: "float-medium",
+    layer: "foreground",
   },
   {
     id: "form-1",
@@ -118,6 +154,18 @@ const fragments: FragmentConfig[] = [
     delay: 1,
     animation: "float-fast",
     layer: "background",
+  },
+  {
+    id: "upload-attachments",
+    imagePath: "/hero-fragments/upload attachments post mail.png",
+    imageAlt: "Upload attachments fragment",
+    size: "w-[440px] md:w-[440px] lg:w-[550px]", // Reduced to ~50% of original (882px)
+    position: { top: "38%", left: "50%", right: "auto" },
+    mobilePosition: { top: "30%", left: "50%", right: "auto" },
+    rotation: -5,
+    delay: 1.1,
+    animation: "float-medium",
+    layer: "midground",
   },
   {
     id: "connector-1",
@@ -145,7 +193,7 @@ const fragments: FragmentConfig[] = [
     position: { top: "45%", left: "6%" },
     mobilePosition: { top: "50%", left: "5%" },
     rotation: -2,
-    delay: 1.6,
+    delay: 1.5,
     animation: "float-fast",
     layer: "midground",
   },
