@@ -209,6 +209,11 @@ All colors MUST be HSL.
   .delay-500 {
     animation-delay: 0.5s;
   }
+
+  /* Text color for dark backgrounds (hero section) */
+  .text-on-dark {
+    color: hsl(0 0% 100%);
+  }
 }
 
 @keyframes fadeInUp {

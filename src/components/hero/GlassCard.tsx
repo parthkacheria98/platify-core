@@ -31,7 +31,7 @@ export const GlassCard: React.FC = () => {
           transition={{ duration: 0.6, delay: 0.2 }}
           className="text-3xl md:text-4xl lg:text-5xl font-light mb-4 md:mb-6 text-center"
         >
-          <span className="bg-gradient-to-r from-foreground via-foreground to-foreground/70 bg-clip-text text-transparent">
+          <span className="bg-gradient-to-r from-white via-white to-white/70 bg-clip-text text-transparent">
             Stop juggling 10 tools.
           </span>
         </motion.h2>
@@ -41,7 +41,7 @@ export const GlassCard: React.FC = () => {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6, delay: 0.3 }}
-          className="text-base md:text-lg lg:text-xl text-foreground leading-relaxed font-light mb-8 md:mb-10 text-center max-w-xl mx-auto"
+          className="text-base md:text-lg lg:text-xl text-on-dark leading-relaxed font-light mb-8 md:mb-10 text-center max-w-xl mx-auto"
         >
           Replace Sheets + Slack + Notion + Zapier + n8n with ONE platform built for how your team actually works.
         </motion.p>
