@@ -25,3 +25,7 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+
+server/blogPosts.json
+server/caseStudies.json
