@@ -293,9 +293,9 @@ export const HeroSection: React.FC = () => {
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
       className="relative py-24 md:py-32 px-6 lg:px-12 border-t border-border/50 overflow-hidden min-h-[600px] md:min-h-[800px]"
-      style={{
-        background: "hsl(220 20% 8%)",
-      }}
+      // style={{
+      //   background: "hsl(220 20% 8%)",
+      // }}
     >
       {/* Ambient glow effects */}
       <div
@@ -386,7 +386,7 @@ export const HeroSection: React.FC = () => {
       })}
 
       {/* Center Glass Card */}
-      <div className="relative z-50 flex items-center justify-center min-h-[400px] md:min-h-[500px]">
+      <div className="relative z-40 flex items-center justify-center min-h-[400px] md:min-h-[500px]">
         <GlassCard />
       </div>
     </section>
