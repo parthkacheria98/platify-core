@@ -14,7 +14,7 @@ const __dirname = path.dirname(__filename);
 const BLOG_POSTS_FILE = path.join(__dirname, 'blogPosts.json');
 
 const app = express();
-const PORT = process.env.PORT || 3001;
+const PORT = process.env.PORT || 3010;
 
 // Middleware
 const allowedOrigins = [
