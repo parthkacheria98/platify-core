@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import { cn } from "@/lib/utils";
 import { ThemeToggle } from "./ThemeToggle";
 import platifyLogo from "@/assets/platify-logo.png";
+import platypusLogo from "@/assets/platifyplatypuslogo.png";
 
 const Navigation = () => {
   const location = useLocation();
@@ -32,11 +33,12 @@ const Navigation = () => {
       )}
     >
       <div className="max-w-9xl mx-auto px-6 lg:px-12">
-        <div className="flex flex-col md:flex-row md:items-center md:justify-between py-2 md:py-0 gap-2 md:gap-4 md:h-20 lg:h-24">
+        <div className="flex flex-col md:flex-row md:items-center md:justify-between py-1 md:py-0 gap-2 md:gap-4 md:h-20 lg:h-24">
           <Link
             to="/"
-            className="hover:opacity-70 transition-opacity duration-300 flex-shrink-0"
+            className="hover:opacity-70 transition-opacity duration-300 flex-shrink-0 flex items-center gap-1"
           >
+            <img src={platypusLogo} alt="Platify Platypus" className="h-9 md:h-14 w-auto md:-translate-y-[1px]" />
             <img src={platifyLogo} alt="Platify" className="h-32 md:h-[8rem] w-auto dark:invert" />
           </Link>
 
