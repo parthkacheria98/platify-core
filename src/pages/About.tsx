@@ -102,7 +102,7 @@ const About = () => {
       </section>
 
       {/* Values */}
-      <section className="py-24 md:py-32 px-6 lg:px-12">
+      <section className="pt-24 md:pt-32 pb-0 px-6 lg:px-12 border-t border-border/50">
         <div className="max-w-6xl mx-auto">
           <h2 className="mb-16 md:mb-24">What Guides Us</h2>
           
@@ -147,7 +147,7 @@ const About = () => {
       </section>
 
       {/* CTA */}
-      <section className="py-24 md:py-32 px-6 lg:px-12 border-t border-border/50">
+      <section className="pt-12 md:pt-16 pb-24 md:pb-32 px-6 lg:px-12 border-t border-border/50">
         <div className="max-w-4xl mx-auto text-center">
           <h2 className="mb-8 md:mb-12">Work With Us</h2>
           

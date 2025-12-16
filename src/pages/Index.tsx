@@ -11,70 +11,70 @@ const Index = () => {
   const opacity = useTransform(scrollYProgress, [0, 0.2], [1, 0]);
   const scale = useTransform(scrollYProgress, [0, 0.2], [1, 0.95]);
   
-  const [outcomes, setOutcomes] = useState([
-    "Operational clarity through unified systems",
-    "Faster decision-making with real-time data",
-    "Fewer errors via automated workflows",
-    "One source of truth for your entire team",
-    "Tools that perfectly match your workflow",
-  ]);
+  // const [outcomes, setOutcomes] = useState([
+  //   "Operational clarity through unified systems",
+  //   "Faster decision-making with real-time data",
+  //   "Fewer errors via automated workflows",
+  //   "One source of truth for your entire team",
+  //   "Tools that perfectly match your workflow",
+  // ]);
 
-  useEffect(() => {
-    // Load outcomes from localStorage
-    const saved = localStorage.getItem("signatureOutcomes");
-    if (saved) {
-      const parsedOutcomes = JSON.parse(saved);
-      setOutcomes(parsedOutcomes.map((o: any) => o.text));
-    }
-  }, []);
+  // useEffect(() => {
+  //   // Load outcomes from localStorage
+  //   const saved = localStorage.getItem("signatureOutcomes");
+  //   if (saved) {
+  //     const parsedOutcomes = JSON.parse(saved);
+  //     setOutcomes(parsedOutcomes.map((o: any) => o.text));
+  //   }
+  // }, []);
 
-  const [currentOutcome, setCurrentOutcome] = useState(0);
-  const [isDeleting, setIsDeleting] = useState(false);
-  const [text, setText] = useState("");
-  const [delta, setDelta] = useState(40);
+  // const [currentOutcome, setCurrentOutcome] = useState(0);
+  // const [isDeleting, setIsDeleting] = useState(false);
+  // const [text, setText] = useState("");
+  // const [delta, setDelta] = useState(40);
 
-  useEffect(() => {
-    const ticker = setInterval(() => {
-      tick();
-    }, delta);
+  // useEffect(() => {
+  //   const ticker = setInterval(() => {
+  //     tick();
+  //   }, delta);
 
-    return () => clearInterval(ticker);
-  }, [text, isDeleting, currentOutcome, delta]);
+  //   return () => clearInterval(ticker);
+  // }, [text, isDeleting, currentOutcome, delta]);
 
-  const tick = () => {
-    const fullText = outcomes[currentOutcome];
+  // const tick = () => {
+  //   const fullText = outcomes[currentOutcome];
     
-    if (!isDeleting) {
-      setText(fullText.substring(0, text.length + 1));
-      setDelta(40); // Faster typing: 40ms per character (was 100ms)
+  //   if (!isDeleting) {
+  //     setText(fullText.substring(0, text.length + 1));
+  //     setDelta(40); // Faster typing: 40ms per character (was 100ms)
 
-      if (text === fullText) {
-        setTimeout(() => setIsDeleting(true), 3000); // Display for 3 seconds (was 2s) - good reading time
-        setDelta(3000);
-      }
-    } else {
-      setText(fullText.substring(0, text.length - 1));
-      setDelta(30); // Faster deleting: 30ms per character (was 50ms)
+  //     if (text === fullText) {
+  //       setTimeout(() => setIsDeleting(true), 3000); // Display for 3 seconds (was 2s) - good reading time
+  //       setDelta(3000);
+  //     }
+  //   } else {
+  //     setText(fullText.substring(0, text.length - 1));
+  //     setDelta(30); // Faster deleting: 30ms per character (was 50ms)
 
-      if (text === "") {
-        setIsDeleting(false);
-        setCurrentOutcome((prev) => (prev + 1) % outcomes.length);
-        setDelta(300); // Shorter pause before next (was 500ms)
-      }
-    }
-  };
+  //     if (text === "") {
+  //       setIsDeleting(false);
+  //       setCurrentOutcome((prev) => (prev + 1) % outcomes.length);
+  //       setDelta(300); // Shorter pause before next (was 500ms)
+  //     }
+  //   }
+  // };
 
   const industries = [
     { name: "Jewellery & Luxury", description: "End-to-end operations platforms for design, production, and retail" },
     { name: "Manufacturing", description: "Workflow systems for production, inventory, and supply chain" },
-    { name: "D2C Brands", description: "Insights & operations tools for scaling your direct-to-consumer business" },
-    { name: "Startups & Founders", description: "Internal tools and dashboards to streamline your growing operations" },
+    { name: "D2C Brands & E-commerce", description: "Insights & operations tools for scaling your business" },
+    { name: "Startups & Founders", description: "Internal tools and dashboards for your growing operations" },
   ];
 
   const buildTypes = [
     { name: "Complete Business Platforms", description: "Full-stack systems that power your entire operation" },
     { name: "Internal Tools", description: "Custom dashboards and admin panels" },
-    { name: "Workflow Automation", description: "Streamline repetitive processes" },
+    { name: "Beautiful Websites", description: "Modular and easy to edit" },
     { name: "Client Portals", description: "White-label customer platforms" },
     { name: "Vendor Portals", description: "Supplier collaboration systems" },
     { name: "Analytics Dashboards", description: "Real-time insights and reporting" },
@@ -82,22 +82,22 @@ const Index = () => {
 
   const testimonials = [
     {
-      quote: "Nohov transformed our jewelry production workflow. What used to take days in spreadsheets now happens instantly in one beautiful platform.",
-      author: "Sarah Chen",
-      role: "Founder, Lumière Jewelry",
+      quote: "Platify transformed our jewelry production workflows. We have shifted all our teams onto this and they love it!",
+      author: "Nimit Parikh",
+      role: "Manager, Trezza Jewels",
       company: "Luxury Jewelry Brand"
     },
     {
-      quote: "The custom portal they built connects our 50+ vendors seamlessly. Our supply chain has never been this transparent.",
-      author: "Michael Rodriguez",
-      role: "Operations Director",
+      quote: "The custom portal they built connects our 50+ vendors seamlessly. Our customers love the transparency!.",
+      author: "Aditya Khanna",
+      role: "Manager, Jewelart",
       company: "Manufacturing Company"
     },
     {
       quote: "Finally, a platform that actually fits how we work. No more juggling five different tools. Everything is in one place.",
-      author: "Priya Patel",
-      role: "CEO",
-      company: "D2C Fashion Brand"
+      author: "Binoy Shah",
+      role: "Manager, Maxmark",
+      company: "Jewelry Manufacturer"
     },
   ];
 
@@ -237,7 +237,7 @@ const Index = () => {
                 }
               }}
             >
-              {["We", "Build", "the", "Systems"].map((word, i) => (
+              {["We", "Build", "The", "Platform"].map((word, i) => (
                 <motion.span
                   key={i}
                   initial={{ opacity: 0, y: 20 }}
@@ -325,12 +325,25 @@ const Index = () => {
               </motion.div>
             ))}
           </div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.4 }}
+            className="mt-16 md:mt-24 text-center"
+          >
+            <Link to="/services">
+              <Button variant="premium" size="xl">
+                Our Services
+              </Button>
+            </Link>
+          </motion.div>
         </div>
       </section>
 
       {/* Signature Outcomes */}
-      <section className="relative py-24 md:py-32 px-6 lg:px-12 border-t border-border/50 overflow-hidden">
-        {/* Animated gradient background */}
+      {/* <section className="relative py-24 md:py-32 px-6 lg:px-12 border-t border-border/50 overflow-hidden">
         <motion.div 
           className="absolute inset-0 opacity-30"
           animate={{
@@ -367,7 +380,6 @@ const Index = () => {
               transition={{ duration: 0.8 }}
               className="relative text-3xl md:text-5xl font-light min-h-[120px] flex items-center"
             >
-              {/* Glowing background effect */}
               <motion.div
                 className="absolute inset-0 blur-3xl opacity-50"
                 animate={{
@@ -393,7 +405,7 @@ const Index = () => {
             </motion.div>
           </div>
         </div>
-      </section>
+      </section> */}
 
       {/* Industries */}
       <section className="py-24 md:py-32 px-6 lg:px-12 border-t border-border/50">

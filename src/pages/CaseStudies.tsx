@@ -85,17 +85,19 @@ const CaseStudies = () => {
                 style={{ animationDelay: `${index * 0.15}s` }}
               >
                 {/* Video */}
-                <div className="mb-12 overflow-hidden border-2 border-border rounded-lg">
-                  <div className="relative w-full" style={{ paddingBottom: '56.25%' }}>
-                    <iframe
-                      src={study.videoUrl}
-                      title={study.title}
-                      className="absolute top-0 left-0 w-full h-full"
-                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                      allowFullScreen
-                    />
+                {study.videoUrl && (
+                  <div className="mb-12 overflow-hidden border-2 border-border rounded-lg">
+                    <div className="relative w-full" style={{ paddingBottom: '56.25%' }}>
+                      <iframe
+                        src={study.videoUrl}
+                        title={study.title}
+                        className="absolute top-0 left-0 w-full h-full"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                        allowFullScreen
+                      />
+                    </div>
                   </div>
-                </div>
+                )}
 
                 {/* Content */}
                 <div className="grid md:grid-cols-12 gap-12">

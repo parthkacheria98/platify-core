@@ -6,7 +6,7 @@ import Footer from "@/components/Footer";
 const Services = () => {
   const services = [
     {
-      title: "Custom Internal Software",
+      title: "Custom Business Platforms",
       description: "Tailored platforms engineered to match your exact workflow. From lead capture to delivery, we build systems that reflect how your business actually operates.",
       features: ["Bespoke engineering", "Zero compromises", "Built for your team"],
     },
@@ -16,14 +16,14 @@ const Services = () => {
       features: ["Branded experience", "Secure access", "Real-time updates"],
     },
     {
-      title: "Beautiful, High Performance Websites",
+      title: "Beautiful Custom Websites",
       description: "From fully custom websites to Shopify and ecommerce setups, everything that needs to change is built to be editable, without calling a developer for every update.",
       features: ["Beautiful designs and animations", "Customized Admin Panels that actually give you control", "Seamless Integrations with your existing systems"],
     },
     {
       title: "Analytics & Business Insights",
       description: "We act as your analytics team and transform your data into clear, regular insights so you always know what is working, what is not, and where to focus next.",
-      features: ["Fully automate businesss reporting", "Get to truly know your customers", ""],
+      features: ["Fully automated businesss reporting", "Get to truly know your customers", "Get dashboards you will actually use"],
     }
   ];
 

@@ -33,13 +33,15 @@ const Navigation = () => {
       )}
     >
       <div className="max-w-9xl mx-auto px-6 lg:px-12">
-        <div className="flex flex-col md:flex-row md:items-center md:justify-between py-1 md:py-0 gap-2 md:gap-4 md:h-20 lg:h-24">
+        <div className="flex flex-col md:flex-row md:items-center md:justify-between py-2 md:py-0 gap-2 md:gap-4 md:h-20 lg:h-24">
           <Link
             to="/"
-            className="hover:opacity-70 transition-opacity duration-300 flex-shrink-0 flex items-center gap-1"
+            className="hover:opacity-70 transition-opacity duration-300 flex-shrink-0 flex items-center gap-2 md:gap-3"
           >
-            <img src={platypusLogo} alt="Platify Platypus" className="h-9 md:h-14 w-auto md:-translate-y-[1px]" />
-            <img src={platifyLogo} alt="Platify" className="h-32 md:h-[8rem] w-auto dark:invert" />
+            <img src={platypusLogo} alt="Platify Platypus" className="h-10 md:h-16 w-auto md:relative md:-top-[1px]" />
+            <div className="overflow-hidden flex items-center h-12 md:h-16">
+              <img src={platifyLogo} alt="Platify" className="h-16 md:h-20 w-auto dark:invert scale-125" />
+            </div>
           </Link>
 
           <div className="flex items-center justify-between md:justify-end w-full md:w-auto gap-4 sm:gap-4 md:gap-8 lg:gap-12">

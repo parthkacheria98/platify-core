@@ -10,7 +10,7 @@ const Footer = () => {
           <div className="md:col-span-2">
             <h3 className="text-xl font-light mb-4">Platify</h3>
             <p className="text-muted-foreground max-w-md leading-relaxed">
-              We build the systems your business runs on. Bespoke platforms engineered for clarity, precision, and premium execution.
+              We build the platform your business runs on. Bespoke platforms engineered for clarity and precision.
             </p>
           </div>
 
