@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import ReactMarkdown from "react-markdown";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 
@@ -122,16 +123,16 @@ const CaseStudies = () => {
 
                     <div>
                       <h4 className="mb-4">The Problem</h4>
-                      <p className="text-muted-foreground text-lg leading-relaxed">
-                        {study.problem}
-                      </p>
+                      <div className="prose prose-sans prose-lg max-w-none prose-invert prose-p:text-muted-foreground prose-p:text-lg prose-p:leading-relaxed prose-strong:text-foreground prose-strong:font-medium prose-ul:text-muted-foreground prose-ol:text-muted-foreground prose-li:text-muted-foreground prose-a:text-primary prose-a:no-underline hover:prose-a:underline">
+                        <ReactMarkdown>{study.problem}</ReactMarkdown>
+                      </div>
                     </div>
 
                     <div>
                       <h4 className="mb-4">The Solution</h4>
-                      <p className="text-muted-foreground text-lg leading-relaxed">
-                        {study.solution}
-                      </p>
+                      <div className="prose prose-sans prose-lg max-w-none prose-invert prose-p:text-muted-foreground prose-p:text-lg prose-p:leading-relaxed prose-strong:text-foreground prose-strong:font-medium prose-ul:text-muted-foreground prose-ol:text-muted-foreground prose-li:text-muted-foreground prose-a:text-primary prose-a:no-underline hover:prose-a:underline">
+                        <ReactMarkdown>{study.solution}</ReactMarkdown>
+                      </div>
                     </div>
 
                     <div>
@@ -139,8 +140,10 @@ const CaseStudies = () => {
                       <ul className="space-y-4">
                         {study.impact.map((item, i) => (
                           <li key={i} className="flex items-start">
-                            <span className="text-primary mr-4 text-xl">—</span>
-                            <span className="text-muted-foreground text-lg">{item}</span>
+                            <span className="text-primary mr-4 text-xl flex-shrink-0">—</span>
+                            <div className="prose prose-sans prose-lg max-w-none prose-invert prose-p:text-muted-foreground prose-p:text-lg prose-p:my-0 prose-p:leading-relaxed prose-strong:text-foreground prose-strong:font-medium prose-ul:list-none prose-ol:list-none prose-li:list-none prose-a:text-primary prose-a:no-underline hover:prose-a:underline">
+                              <ReactMarkdown>{item}</ReactMarkdown>
+                            </div>
                           </li>
                         ))}
                       </ul>

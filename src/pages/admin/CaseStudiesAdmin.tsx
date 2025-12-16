@@ -299,10 +299,10 @@ const CaseStudiesAdmin = () => {
                 </div>
                 
                 <div>
-                  <label className="text-sm text-muted-foreground mb-2 block">The Problem *</label>
+                  <label className="text-sm text-muted-foreground mb-2 block">The Problem * (supports markdown)</label>
                   <Textarea 
-                    placeholder="Describe the client's challenges..."
-                    rows={4}
+                    placeholder="Describe the client's challenges...&#10;&#10;You can use **bold**, *italic*, lists, and more markdown formatting."
+                    rows={6}
                     value={formData.problem}
                     onChange={(e) => setFormData({ ...formData, problem: e.target.value })}
                     required
@@ -310,10 +310,10 @@ const CaseStudiesAdmin = () => {
                 </div>
                 
                 <div>
-                  <label className="text-sm text-muted-foreground mb-2 block">The Solution *</label>
+                  <label className="text-sm text-muted-foreground mb-2 block">The Solution * (supports markdown)</label>
                   <Textarea 
-                    placeholder="Describe how you solved it..."
-                    rows={4}
+                    placeholder="Describe how you solved it...&#10;&#10;You can use **bold**, *italic*, lists, and more markdown formatting."
+                    rows={6}
                     value={formData.solution}
                     onChange={(e) => setFormData({ ...formData, solution: e.target.value })}
                     required
@@ -321,10 +321,10 @@ const CaseStudiesAdmin = () => {
                 </div>
 
                 <div>
-                  <label className="text-sm text-muted-foreground mb-2 block">Impact (one per line) *</label>
+                  <label className="text-sm text-muted-foreground mb-2 block">Impact (one per line, supports markdown) *</label>
                   <Textarea 
-                    placeholder="60% faster processing&#10;Zero discrepancies&#10;Complete visibility"
-                    rows={4}
+                    placeholder="60% faster processing&#10;Zero discrepancies&#10;Complete visibility&#10;&#10;Each line will be rendered as a separate impact item. You can use markdown formatting like **bold** or *italic*."
+                    rows={6}
                     value={formData.impact}
                     onChange={(e) => setFormData({ ...formData, impact: e.target.value })}
                     required

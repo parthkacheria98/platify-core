@@ -88,7 +88,7 @@ const Index = () => {
       company: "Luxury Jewelry Brand"
     },
     {
-      quote: "The custom portal they built connects our 50+ vendors seamlessly. Our customers love the transparency!.",
+      quote: "The custom portal they built connects our 50+ vendors seamlessly. Our customers love the transparency!",
       author: "Aditya Khanna",
       role: "Manager, Jewelart",
       company: "Manufacturing Company"

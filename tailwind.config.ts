@@ -114,7 +114,24 @@ export default {
         "float-medium": "float-medium 6s ease-in-out infinite",
         "float-fast": "float-fast 4s ease-in-out infinite",
       },
+      typography: {
+        DEFAULT: {
+          css: {
+            fontFamily: ['-apple-system', 'BlinkMacSystemFont', 'Inter', 'system-ui', 'sans-serif'].join(', '),
+          },
+        },
+        invert: {
+          css: {
+            fontFamily: ['-apple-system', 'BlinkMacSystemFont', 'Inter', 'system-ui', 'sans-serif'].join(', '),
+          },
+        },
+      },
     },
   },
-  plugins: [require("tailwindcss-animate")],
+  plugins: [
+    require("tailwindcss-animate"),
+    require("@tailwindcss/typography")({
+      target: 'modern',
+    }),
+  ],
 } satisfies Config;
