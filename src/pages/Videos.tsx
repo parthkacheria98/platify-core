@@ -97,7 +97,7 @@ const Videos = () => {
           
           <div className="animate-fade-in-up delay-200">
             <p className="text-xl md:text-2xl text-muted-foreground max-w-3xl leading-relaxed font-light">
-              See how custom platforms transform operations—from concept to execution.
+              See how custom platforms transform operations, from concept to execution.
             </p>
           </div>
         </div>

@@ -12,7 +12,7 @@ const About = () => {
       <section className="pt-32 md:pt-48 pb-24 md:pb-32 px-6 lg:px-12">
         <div className="max-w-6xl mx-auto">
           <div className="animate-fade-in-up">
-            <h1 className="mb-8 md:mb-12">About the Studio</h1>
+            <h1 className="mb-8 md:mb-12">About Platify</h1>
           </div>
           
           <div className="animate-fade-in-up delay-200">
@@ -31,7 +31,7 @@ const About = () => {
               <h2 className="mb-8">Our Philosophy</h2>
               <div className="space-y-6 text-muted-foreground text-lg leading-relaxed">
                 <p>
-                  Most businesses don't need more tools. They need fewer, better ones—systems that actually reflect how they work.
+                  Most businesses don't need more tools. They need fewer, better systems that actually reflect how they work.
                 </p>
                 <p>
                   We believe that clarity, precision, and craftsmanship matter. That software should be invisible when it works and obvious when it doesn't.

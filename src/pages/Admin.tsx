@@ -17,7 +17,7 @@ const Admin = () => {
       // Initialize defaults if they don't exist
       if (!localStorage.getItem("blogPosts")) {
         const defaults = [
-          { id: "1", title: "The Cost of Operational Chaos", slug: "operational-clarity", excerpt: "Every spreadsheet, every Notion page, every scattered email trail—they all compound into something far more expensive than you realize.", category: "Operations", date: "2024-03-15", readTime: "8 min read", content: "", published: true },
+          { id: "1", title: "The Cost of Operational Chaos", slug: "operational-clarity", excerpt: "Every spreadsheet, every Notion page, every scattered email trail, all compound into something far more expensive than you realize.", category: "Operations", date: "2024-03-15", readTime: "8 min read", content: "", published: true },
           { id: "2", title: "Systems Over Solutions", slug: "systems-thinking", excerpt: "Most businesses don't need another tool. They need one system that reflects how they actually work.", category: "Strategy", date: "2024-03-10", readTime: "6 min read", content: "", published: true },
           { id: "3", title: "Redesigning Workflows for Scale", slug: "workflow-redesign", excerpt: "The workflows that got you here won't get you there. Here's how we approach workflow transformation.", category: "Process", date: "2024-03-05", readTime: "10 min read", content: "", published: true },
           { id: "4", title: "Why Bespoke Still Matters", slug: "bespoke-engineering", excerpt: "In a world of templates and low-code tools, custom engineering delivers clarity, control, and competitive advantage.", category: "Engineering", date: "2024-02-28", readTime: "7 min read", content: "", published: true },

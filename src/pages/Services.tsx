@@ -7,34 +7,24 @@ const Services = () => {
   const services = [
     {
       title: "Custom Internal Software",
-      description: "Tailored platforms engineered to match your exact workflow. From lead capture to fulfillment, we build systems that reflect how your business actually operates.",
+      description: "Tailored platforms engineered to match your exact workflow. From lead capture to delivery, we build systems that reflect how your business actually operates.",
       features: ["Bespoke engineering", "Zero compromises", "Built for your team"],
     },
     {
-      title: "Workflow Design & Process Mapping",
-      description: "Before we build, we map. We study your operations, document your processes, and design workflows that eliminate friction and enhance clarity.",
-      features: ["Deep discovery", "Process optimization", "Strategic design"],
-    },
-    {
-      title: "Automation & Routing Systems",
-      description: "Connect your entire workflow with intelligent automation. Approvals, notifications, data routing—automated with precision and reliability.",
-      features: ["Intelligent logic", "Zero manual work", "Reliable execution"],
-    },
-    {
       title: "Client & Vendor Portals",
-      description: "Give your stakeholders access to what they need—nothing more, nothing less. Beautiful, secure portals that enhance relationships and reduce back-and-forth.",
+      description: "Give your stakeholders access to what they need. Nothing more, nothing less. Beautiful, secure portals that enhance relationships and reduce back-and-forth.",
       features: ["Branded experience", "Secure access", "Real-time updates"],
     },
     {
-      title: "Dashboards & Reporting",
-      description: "See what matters. Custom dashboards and reporting systems that surface the insights you need to make faster, smarter decisions.",
-      features: ["Real-time visibility", "Custom metrics", "Actionable insights"],
+      title: "Beautiful, High Performance Websites",
+      description: "From fully custom websites to Shopify and ecommerce setups, everything that needs to change is built to be editable, without calling a developer for every update.",
+      features: ["Beautiful designs and animations", "Customized Admin Panels that actually give you control", "Seamless Integrations with your existing systems"],
     },
     {
-      title: "Complete Platform Build",
-      description: "End-to-end platform development—from discovery to deployment. One partner, one system, one fixed cost for a complete solution.",
-      features: ["White-glove service", "Fixed pricing", "Ongoing refinement"],
-    },
+      title: "Analytics & Business Insights",
+      description: "We act as your analytics team and transform your data into clear, regular insights so you always know what is working, what is not, and where to focus next.",
+      features: ["Fully automate businesss reporting", "Get to truly know your customers", ""],
+    }
   ];
 
   return (
@@ -50,7 +40,7 @@ const Services = () => {
           
           <div className="animate-fade-in-up delay-200">
             <p className="text-xl md:text-2xl text-muted-foreground max-w-3xl leading-relaxed font-light">
-              Premium engineering, white-glove approach, and platforms designed to fit your operations—not the other way around.
+            Bespoke platforms designed, built, and operated around how your business actually works.
             </p>
           </div>
         </div>
