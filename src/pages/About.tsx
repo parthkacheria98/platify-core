@@ -74,7 +74,7 @@ const About = () => {
       {/* Why Us */}
       <section className="py-24 md:py-32 px-6 lg:px-12 bg-muted/30">
         <div className="max-w-6xl mx-auto">
-          <h2 className="mb-12 md:mb-16">Why High-End Clients Choose Us</h2>
+          <h2 className="mb-12 md:mb-16">Why Clients Choose Us</h2>
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
             <div>
@@ -112,9 +112,9 @@ const About = () => {
                 <p className="text-3xl font-light">01</p>
               </div>
               <div className="md:col-span-2">
-                <h3 className="mb-4">Excellence Over Speed</h3>
+                <h3 className="mb-4">Intent Over Impulse</h3>
                 <p className="text-muted-foreground text-lg">
-                  We don't rush. We take the time to understand, design, and engineer systems that will serve your business for years.
+                Every decision is deliberate, so the system holds up as complexity grows.
                 </p>
               </div>
             </div>
@@ -157,7 +157,7 @@ const About = () => {
 
           <Link to="/contact">
             <Button variant="hero" size="xl">
-              Book a Consultation
+              Let's Talk
             </Button>
           </Link>
         </div>
