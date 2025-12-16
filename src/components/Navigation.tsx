@@ -32,21 +32,21 @@ const Navigation = () => {
       )}
     >
       <div className="max-w-9xl mx-auto px-6 lg:px-12">
-        <div className="flex items-center justify-between h-20 md:h-24 gap-4">
+        <div className="flex flex-col md:flex-row md:items-center md:justify-between py-2 md:py-0 gap-2 md:gap-4 md:h-20 lg:h-24">
           <Link
             to="/"
             className="hover:opacity-70 transition-opacity duration-300 flex-shrink-0"
           >
-            <img src={platifyLogo} alt="Platify" className="h-[7.5rem] w-auto dark:invert" />
+            <img src={platifyLogo} alt="Platify" className="h-32 md:h-[8rem] w-auto dark:invert" />
           </Link>
 
-          <div className="flex items-center gap-4 md:gap-8 lg:gap-12 flex-wrap justify-end">
+          <div className="flex items-center justify-between md:justify-end w-full md:w-auto gap-4 sm:gap-4 md:gap-8 lg:gap-12">
             {links.map((link) => (
               <Link
                 key={link.path}
                 to={link.path}
                 className={cn(
-                  "text-xs sm:text-sm md:text-base font-light tracking-wide transition-all duration-300 whitespace-nowrap",
+                  "text-sm sm:text-base md:text-lg font-light tracking-wide transition-all duration-300 whitespace-nowrap flex-shrink-0",
                   location.pathname === link.path
                     ? "text-foreground"
                     : "text-muted-foreground hover:text-foreground"
