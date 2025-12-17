@@ -10,9 +10,11 @@
     "build": "vite build",
     "build:dev": "vite build --mode development",
     "start": "node server/index.js",
-    "start:pm2": "pm2 start ecosystem.config.js",
+    "start:pm2": "pm2 start server/ecosystem.config.cjs",
     "stop:pm2": "pm2 stop platify-api",
     "restart:pm2": "pm2 restart platify-api",
+    "pm2:logs": "pm2 logs platify-api",
+    "pm2:status": "pm2 status",
     "lint": "eslint .",
     "preview": "vite preview"
   },

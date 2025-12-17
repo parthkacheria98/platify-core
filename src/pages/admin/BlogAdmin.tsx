@@ -286,12 +286,16 @@ const BlogAdmin = () => {
                 </div>
                 
                 <div>
-                  <label className="text-sm text-muted-foreground mb-2 block">Content</label>
+                  <label className="text-sm text-muted-foreground mb-2 block">Content (supports markdown)</label>
+                  <p className="text-xs text-muted-foreground mb-3">
+                    Supports full markdown including images, videos (YouTube, Loom, Vimeo), headings, lists, and blockquotes. Videos on their own line will auto-embed.
+                  </p>
                   <Textarea 
-                    placeholder="Full post content (supports markdown)..."
-                    rows={12}
+                    placeholder="## Introduction&#10;&#10;Write your blog post content here...&#10;&#10;![Image](https://example.com/image.png)&#10;&#10;https://www.loom.com/share/VIDEO_ID"
+                    rows={16}
                     value={formData.content}
                     onChange={(e) => setFormData({ ...formData, content: e.target.value })}
+                    className="font-mono text-sm"
                   />
                 </div>
 

@@ -18,6 +18,7 @@ interface CaseStudy {
   image: string;
   videoUrl: string;
   published: boolean;
+  content?: string; // Optional full markdown content
 }
 
 const CaseStudiesAdmin = () => {
@@ -35,6 +36,7 @@ const CaseStudiesAdmin = () => {
     image: "",
     videoUrl: "",
     published: true,
+    content: "",
   });
 
   useEffect(() => {
@@ -152,6 +154,7 @@ const CaseStudiesAdmin = () => {
       image: caseStudy.image,
       videoUrl: caseStudy.videoUrl,
       published: caseStudy.published,
+      content: caseStudy.content || "",
     });
     setEditingId(caseStudy.id);
     setShowForm(true);
@@ -196,6 +199,7 @@ const CaseStudiesAdmin = () => {
       image: "",
       videoUrl: "",
       published: true,
+      content: "",
     });
     setEditingId(null);
     setShowForm(false);
@@ -328,6 +332,22 @@ const CaseStudiesAdmin = () => {
                     value={formData.impact}
                     onChange={(e) => setFormData({ ...formData, impact: e.target.value })}
                     required
+                  />
+                </div>
+
+                <div className="border-t border-border pt-6 mt-6">
+                  <label className="text-sm text-muted-foreground mb-2 block">
+                    Full Markdown Content (Optional)
+                  </label>
+                  <p className="text-xs text-muted-foreground mb-3">
+                    If provided, this will be used instead of Problem/Solution/Impact. Supports full markdown including images, videos (YouTube, Loom, Vimeo), headings, lists, and blockquotes.
+                  </p>
+                  <Textarea 
+                    placeholder="## Why Spreadsheet Workflows Break&#10;&#10;Most systems start simple...&#10;&#10;![Image](https://example.com/image.png)&#10;&#10;https://www.loom.com/share/VIDEO_ID"
+                    rows={12}
+                    value={formData.content}
+                    onChange={(e) => setFormData({ ...formData, content: e.target.value })}
+                    className="font-mono text-sm"
                   />
                 </div>
 

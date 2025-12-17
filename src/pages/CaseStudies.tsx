@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import ReactMarkdown from "react-markdown";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
+import { CaseStudyMarkdown } from "@/components/CaseStudyMarkdown";
 
 interface CaseStudy {
   id: string;
@@ -16,6 +16,7 @@ interface CaseStudy {
   image: string;
   videoUrl: string;
   published: boolean;
+  content?: string; // Optional full markdown content
 }
 
 const CaseStudies = () => {
@@ -85,79 +86,114 @@ const CaseStudies = () => {
                 className="animate-fade-in-up"
                 style={{ animationDelay: `${index * 0.15}s` }}
               >
-                {/* Video */}
-                {study.videoUrl && (
-                  <div className="mb-12 overflow-hidden border-2 border-border rounded-lg">
-                    <div className="relative w-full" style={{ paddingBottom: '56.25%' }}>
-                      <iframe
-                        src={study.videoUrl}
-                        title={study.title}
-                        className="absolute top-0 left-0 w-full h-full"
-                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                        allowFullScreen
-                      />
-                    </div>
-                  </div>
-                )}
-
-                {/* Content */}
-                <div className="grid md:grid-cols-12 gap-12">
-                  {/* Sidebar */}
-                  <div className="md:col-span-4">
-                    <div className="space-y-6">
-                      <div>
-                        <div className="text-sm text-muted-foreground mb-2">Client</div>
-                        <div className="font-light">{study.client}</div>
+                {/* If content field exists, render full markdown */}
+                {study.content ? (
+                  <div className="grid md:grid-cols-12 gap-12">
+                    {/* Sidebar */}
+                    <div className="md:col-span-4">
+                      <div className="space-y-6 sticky top-24">
+                        <div>
+                          <div className="text-sm text-muted-foreground mb-2">Client</div>
+                          <div className="font-light">{study.client}</div>
+                        </div>
+                        
+                        <div>
+                          <div className="text-sm text-muted-foreground mb-2">Industry</div>
+                          <div className="font-light">{study.industry}</div>
+                        </div>
                       </div>
+                    </div>
+
+                    {/* Main Content - Full Markdown */}
+                    <div className="md:col-span-8">
+                      <h2 className="mb-8">{study.title}</h2>
+                      <CaseStudyMarkdown content={study.content} />
                       
-                      <div>
-                        <div className="text-sm text-muted-foreground mb-2">Industry</div>
-                        <div className="font-light">{study.industry}</div>
+                      <div className="mt-12 pt-8 border-t border-border">
+                        <Link 
+                          to="/contact"
+                          className="inline-flex items-center text-primary hover:text-primary-hover transition-colors duration-300"
+                        >
+                          <span>Discuss your project</span>
+                          <span className="ml-2">→</span>
+                        </Link>
                       </div>
                     </div>
                   </div>
+                ) : (
+                  /* Legacy structure - Problem/Solution/Impact */
+                  <>
+                    {/* Video */}
+                    {study.videoUrl && (
+                      <div className="mb-12 overflow-hidden border-2 border-border rounded-lg">
+                        <div className="relative w-full" style={{ paddingBottom: '56.25%' }}>
+                          <iframe
+                            src={study.videoUrl}
+                            title={study.title}
+                            className="absolute top-0 left-0 w-full h-full"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                            allowFullScreen
+                          />
+                        </div>
+                      </div>
+                    )}
 
-                  {/* Main Content */}
-                  <div className="md:col-span-8 space-y-12">
-                    <h2>{study.title}</h2>
+                    {/* Content */}
+                    <div className="grid md:grid-cols-12 gap-12">
+                      {/* Sidebar */}
+                      <div className="md:col-span-4">
+                        <div className="space-y-6">
+                          <div>
+                            <div className="text-sm text-muted-foreground mb-2">Client</div>
+                            <div className="font-light">{study.client}</div>
+                          </div>
+                          
+                          <div>
+                            <div className="text-sm text-muted-foreground mb-2">Industry</div>
+                            <div className="font-light">{study.industry}</div>
+                          </div>
+                        </div>
+                      </div>
 
-                    <div>
-                      <h4 className="mb-4">The Problem</h4>
-                      <div className="prose prose-sans prose-lg max-w-none prose-invert prose-p:text-muted-foreground prose-p:text-lg prose-p:leading-relaxed prose-strong:text-foreground prose-strong:font-medium prose-ul:text-muted-foreground prose-ol:text-muted-foreground prose-li:text-muted-foreground prose-a:text-primary prose-a:no-underline hover:prose-a:underline">
-                        <ReactMarkdown>{study.problem}</ReactMarkdown>
+                      {/* Main Content */}
+                      <div className="md:col-span-8 space-y-12">
+                        <h2>{study.title}</h2>
+
+                        <div>
+                          <h4 className="mb-4">The Problem</h4>
+                          <CaseStudyMarkdown content={study.problem} />
+                        </div>
+
+                        <div>
+                          <h4 className="mb-4">The Solution</h4>
+                          <CaseStudyMarkdown content={study.solution} />
+                        </div>
+
+                        <div>
+                          <h4 className="mb-6">Impact</h4>
+                          <ul className="space-y-4">
+                            {study.impact.map((item, i) => (
+                              <li key={i} className="flex items-start">
+                                <span className="text-primary mr-4 text-xl flex-shrink-0">—</span>
+                                <div className="flex-1">
+                                  <CaseStudyMarkdown content={item} />
+                                </div>
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+
+                        <Link 
+                          to="/contact"
+                          className="inline-flex items-center text-primary hover:text-primary-hover transition-colors duration-300"
+                        >
+                          <span>Discuss your project</span>
+                          <span className="ml-2">→</span>
+                        </Link>
                       </div>
                     </div>
-
-                    <div>
-                      <h4 className="mb-4">The Solution</h4>
-                      <div className="prose prose-sans prose-lg max-w-none prose-invert prose-p:text-muted-foreground prose-p:text-lg prose-p:leading-relaxed prose-strong:text-foreground prose-strong:font-medium prose-ul:text-muted-foreground prose-ol:text-muted-foreground prose-li:text-muted-foreground prose-a:text-primary prose-a:no-underline hover:prose-a:underline">
-                        <ReactMarkdown>{study.solution}</ReactMarkdown>
-                      </div>
-                    </div>
-
-                    <div>
-                      <h4 className="mb-6">Impact</h4>
-                      <ul className="space-y-4">
-                        {study.impact.map((item, i) => (
-                          <li key={i} className="flex items-start">
-                            <span className="text-primary mr-4 text-xl flex-shrink-0">—</span>
-                            <div className="prose prose-sans prose-lg max-w-none prose-invert prose-p:text-muted-foreground prose-p:text-lg prose-p:my-0 prose-p:leading-relaxed prose-strong:text-foreground prose-strong:font-medium prose-ul:list-none prose-ol:list-none prose-li:list-none prose-a:text-primary prose-a:no-underline hover:prose-a:underline">
-                              <ReactMarkdown>{item}</ReactMarkdown>
-                            </div>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-
-                    <Link 
-                      to="/contact"
-                      className="inline-flex items-center text-primary hover:text-primary-hover transition-colors duration-300"
-                    >
-                      <span>Discuss your project</span>
-                      <span className="ml-2">→</span>
-                    </Link>
-                  </div>
-                </div>
+                  </>
+                )}
               </article>
             ))
           )}

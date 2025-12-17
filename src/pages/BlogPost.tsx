@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
+import { CaseStudyMarkdown } from "@/components/CaseStudyMarkdown";
 
 interface BlogPost {
   id: string;
@@ -106,24 +107,19 @@ const BlogPost = () => {
       {/* Content */}
       <article className="pb-24 md:pb-32 px-6 lg:px-12">
         <div className="max-w-4xl mx-auto">
-          <div className="prose prose-lg max-w-none">
-            {post.content ? (
-              <div 
-                className="text-muted-foreground leading-relaxed"
-                dangerouslySetInnerHTML={{ __html: post.content.replace(/\n/g, '<br />') }}
-              />
-            ) : (
-              <div className="text-muted-foreground leading-relaxed text-lg space-y-6">
-                <p className="text-xl font-light text-foreground mb-8">{post.excerpt}</p>
-                <p>
-                  This is a placeholder for the full blog post content. The content can be added in the admin panel.
-                </p>
-                <p>
-                  To add content to this post, go to the admin panel and edit the post. You can use HTML or markdown-style formatting.
-                </p>
-              </div>
-            )}
-          </div>
+          {post.content ? (
+            <CaseStudyMarkdown content={post.content} />
+          ) : (
+            <div className="text-muted-foreground leading-relaxed text-lg space-y-6">
+              <p className="text-xl font-light text-foreground mb-8">{post.excerpt}</p>
+              <p>
+                This is a placeholder for the full blog post content. The content can be added in the admin panel.
+              </p>
+              <p>
+                To add content to this post, go to the admin panel and edit the post. You can use markdown formatting including images, videos (YouTube, Loom, Vimeo), headings, lists, and blockquotes.
+              </p>
+            </div>
+          )}
 
           {/* Back to Blog */}
           <div className="mt-16 pt-8 border-t border-border">
