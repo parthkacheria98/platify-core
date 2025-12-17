@@ -1,5 +1,6 @@
 import React from "react";
 import ReactMarkdown from "react-markdown";
+import rehypeRaw from "rehype-raw";
 import type { Components } from "react-markdown";
 
 // Helper function to detect and convert video URLs to embed URLs
@@ -84,20 +85,36 @@ export const CaseStudyMarkdown: React.FC<CaseStudyMarkdownProps> = ({ content })
     h5: ({ children }) => <h5 className="text-lg md:text-xl font-normal mb-2 mt-4">{children}</h5>,
     h6: ({ children }) => <h6 className="text-base md:text-lg font-normal mb-2 mt-3">{children}</h6>,
 
-    // Paragraphs - detect video URLs
+    // Paragraphs - detect video URLs and video tags
     p: ({ children, node }) => {
-      // Extract text content and check for video URLs
+      // Check if this paragraph contains a video element (from rehype-raw)
+      const childrenArray = React.Children.toArray(children);
+      const hasVideoElement = childrenArray.some(
+        (child) => React.isValidElement(child) && (child.type === 'video' || (child.type as any)?.displayName === 'video')
+      );
+      
+      if (hasVideoElement) {
+        // Return children directly - the video component will handle it
+        return <>{children}</>;
+      }
+
+      // Check if paragraph contains raw HTML video tag (as string)
       let textContent = "";
       let linkHref = "";
+      let rawHtml = "";
 
       React.Children.forEach(children, (child) => {
         if (typeof child === "string") {
           textContent += child;
+          rawHtml += child;
         } else if (React.isValidElement(child)) {
           // If it's a link, get the href
           if (child.type === "a" && child.props.href) {
             linkHref = child.props.href;
             textContent += child.props.href;
+          } else if (child.type === "video") {
+            // Video element found
+            return;
           } else {
             // For other elements, try to extract text
             const childText = React.Children.toArray(child.props?.children || [])
@@ -107,6 +124,34 @@ export const CaseStudyMarkdown: React.FC<CaseStudyMarkdownProps> = ({ content })
           }
         }
       });
+
+      // Check if the paragraph contains a video tag in raw HTML (when rehype-raw hasn't processed it yet)
+      // This handles cases where the HTML is still a string
+      if (rawHtml.includes('<video')) {
+        // Extract video tag - handle both self-closing and with closing tag
+        const videoMatch = rawHtml.match(/<video[^>]*(?:\/>|>[\s\S]*?<\/video>)/i);
+        if (videoMatch) {
+          // Parse the video tag attributes
+          let videoHtml = videoMatch[0];
+          // If it's self-closing, convert to proper format
+          if (videoHtml.endsWith('/>')) {
+            videoHtml = videoHtml.replace('/>', '></video>');
+          }
+          // Ensure the video has the style attribute if not present
+          if (!videoHtml.includes('style=')) {
+            videoHtml = videoHtml.replace('<video', '<video style="width:100%; border-radius:12px;"');
+          }
+          // Use dangerouslySetInnerHTML to render the video tag
+          return (
+            <div 
+              className="my-8 w-full"
+              dangerouslySetInnerHTML={{ 
+                __html: videoHtml
+              }}
+            />
+          );
+        }
+      }
 
       const trimmedContent = textContent.trim();
       
@@ -257,12 +302,53 @@ export const CaseStudyMarkdown: React.FC<CaseStudyMarkdownProps> = ({ content })
       <strong className="font-medium text-foreground">{children}</strong>
     ),
     em: ({ children }) => <em className="italic">{children}</em>,
+
+    // Video tags - allow HTML video elements
+    video: (props: any) => {
+      const { src, autoplay, loop, muted, playsinline, preload, style, ...rest } = props;
+      // Handle boolean attributes - if they exist in props, they're true
+      const videoProps: any = {
+        src,
+        preload: preload || "none",
+        className: "w-full rounded-lg border border-border",
+        controls: true,
+        ...rest
+      };
+      
+      // Handle boolean attributes correctly
+      if (autoplay !== undefined) videoProps.autoPlay = true;
+      if (loop !== undefined) videoProps.loop = true;
+      if (muted !== undefined) videoProps.muted = true;
+      if (playsinline !== undefined) videoProps.playsInline = true;
+      
+      // Merge custom style with default
+      const mergedStyle = {
+        width: '100%',
+        borderRadius: '12px',
+        ...(style || {})
+      };
+      
+      return (
+        <div className="my-8 w-full">
+          <video {...videoProps} style={mergedStyle} />
+        </div>
+      );
+    },
   };
+
+  // Pre-process content to handle video tags that might be escaped
+  const processedContent = content.replace(
+    /&lt;video([^&]*?)&gt;[\s\S]*?&lt;\/video&gt;/gi,
+    (match) => match.replace(/&lt;/g, '<').replace(/&gt;/g, '>')
+  );
 
   return (
     <div className="prose prose-sans prose-lg max-w-none prose-invert prose-img:my-8 prose-img:rounded-lg prose-img:border prose-img:border-border">
-      <ReactMarkdown components={components} allowedElements={undefined} unwrapDisallowed={false}>
-        {content}
+      <ReactMarkdown 
+        components={components} 
+        rehypePlugins={[rehypeRaw]}
+      >
+        {processedContent}
       </ReactMarkdown>
     </div>
   );

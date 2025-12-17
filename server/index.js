@@ -58,6 +58,12 @@ app.use(cors({
 }));
 app.use(express.json());
 
+// Serve static video files from /var/www/platify-core/videos
+app.use('/videos', express.static('/var/www/platify-core/videos', {
+  maxAge: '1y', // Cache videos for 1 year
+  etag: true
+}));
+
 // Health check endpoint
 app.get('/health', (req, res) => {
   res.json({ status: 'ok' });
