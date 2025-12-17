@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import ReactMarkdown from "react-markdown";
 import rehypeRaw from "rehype-raw";
 import type { Components } from "react-markdown";
@@ -322,38 +322,101 @@ export const CaseStudyMarkdown: React.FC<CaseStudyMarkdownProps> = ({ content })
     // Video tags - allow HTML video elements
     video: (props: any) => {
       const { src, autoplay, loop, muted, playsinline, preload, style, ...rest } = props;
-      // Handle boolean attributes - if they exist in props, they're true
-      const videoProps: any = {
-        src,
-        preload: preload || "none",
-        className: "w-full rounded-lg border border-border",
-        controls: true,
-        ...rest
+      
+      // Mobile autoplay component wrapper
+      const MobileAutoplayWrapper = () => {
+        const videoRef = useRef<HTMLVideoElement>(null);
+        const containerRef = useRef<HTMLDivElement>(null);
+        
+        // Handle boolean attributes - if they exist in props, they're true
+        const videoProps: any = {
+          src,
+          preload: preload || "none",
+          className: "w-full rounded-lg border border-border",
+          controls: true,
+          ...rest
+        };
+        
+        // Handle boolean attributes correctly
+        if (autoplay !== undefined) {
+          videoProps.autoPlay = true;
+          // For mobile autoplay to work, MUST have muted and playsInline
+          videoProps.muted = true;
+          videoProps.playsInline = true;
+        }
+        if (loop !== undefined) videoProps.loop = true;
+        if (muted !== undefined) videoProps.muted = true;
+        if (playsinline !== undefined) videoProps.playsInline = true;
+        
+        // Merge custom style with default
+        const mergedStyle = {
+          width: '100%',
+          borderRadius: '12px',
+          ...(style || {})
+        };
+        
+        // Mobile autoplay: use Intersection Observer ONLY on mobile
+        useEffect(() => {
+          if (!autoplay) return;
+          
+          const video = videoRef.current;
+          const container = containerRef.current;
+          if (!video || !container) return;
+          
+          // Only do this on mobile devices
+          const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+          if (!isMobile) return; // Desktop uses native autoplay, don't interfere
+          
+          // Ensure video is muted and playsInline for mobile
+          video.muted = true;
+          video.playsInline = true;
+          
+          // Function to play video
+          const playVideo = () => {
+            if (video.paused && video.readyState >= 2) {
+              video.play().catch(() => {});
+            }
+          };
+          
+          // Mobile: play when video enters viewport AND when video is ready
+          const observer = new IntersectionObserver(
+            (entries) => {
+              entries.forEach((entry) => {
+                if (entry.isIntersecting) {
+                  playVideo();
+                }
+              });
+            },
+            { threshold: 0.1 }
+          );
+          
+          observer.observe(container);
+          
+          // Also try to play when video loads
+          const handleCanPlay = () => {
+            if (container.getBoundingClientRect().top < window.innerHeight) {
+              playVideo();
+            }
+          };
+          
+          video.addEventListener('canplay', handleCanPlay, { once: true });
+          video.addEventListener('loadeddata', handleCanPlay, { once: true });
+          
+          return () => {
+            observer.disconnect();
+            video.removeEventListener('canplay', handleCanPlay);
+            video.removeEventListener('loadeddata', handleCanPlay);
+          };
+        }, [autoplay]);
+        
+        return (
+          <div ref={containerRef} className="my-8 w-full">
+            <video ref={videoRef} {...videoProps} style={mergedStyle} />
+          </div>
+        );
       };
       
-      // Handle boolean attributes correctly
-      if (autoplay !== undefined) {
-        videoProps.autoPlay = true;
-        // For mobile autoplay to work, MUST have muted and playsInline
-        videoProps.muted = true;
-        videoProps.playsInline = true;
-      }
-      if (loop !== undefined) videoProps.loop = true;
-      if (muted !== undefined) videoProps.muted = true;
-      if (playsinline !== undefined) videoProps.playsInline = true;
-      
-      // Merge custom style with default
-      const mergedStyle = {
-        width: '100%',
-        borderRadius: '12px',
-        ...(style || {})
-      };
-      
-      return (
-        <div className="my-8 w-full">
-          <video {...videoProps} style={mergedStyle} />
-        </div>
-      );
+      return <MobileAutoplayWrapper />;
     },
   };
 

@@ -93,13 +93,13 @@ const CaseStudies = () => {
                     <div className="md:col-span-4">
                       <div className="space-y-6 sticky top-24">
                         <div>
-                          <div className="text-sm text-muted-foreground mb-2">Client</div>
-                          <div className="font-light">{study.client}</div>
+                          <div className="text-base text-muted-foreground mb-2">Client</div>
+                          <div className="font-light text-lg">{study.client}</div>
                         </div>
                         
                         <div>
-                          <div className="text-sm text-muted-foreground mb-2">Industry</div>
-                          <div className="font-light">{study.industry}</div>
+                          <div className="text-base text-muted-foreground mb-2">Industry</div>
+                          <div className="font-light text-lg">{study.industry}</div>
                         </div>
                       </div>
                     </div>
@@ -144,13 +144,13 @@ const CaseStudies = () => {
                       <div className="md:col-span-4">
                         <div className="space-y-6">
                           <div>
-                            <div className="text-sm text-muted-foreground mb-2">Client</div>
-                            <div className="font-light">{study.client}</div>
+                            <div className="text-base text-muted-foreground mb-2">Client</div>
+                            <div className="font-light text-lg">{study.client}</div>
                           </div>
                           
                           <div>
-                            <div className="text-sm text-muted-foreground mb-2">Industry</div>
-                            <div className="font-light">{study.industry}</div>
+                            <div className="text-base text-muted-foreground mb-2">Industry</div>
+                            <div className="font-light text-lg">{study.industry}</div>
                           </div>
                         </div>
                       </div>
