@@ -137,10 +137,26 @@ export const CaseStudyMarkdown: React.FC<CaseStudyMarkdownProps> = ({ content })
           if (videoHtml.endsWith('/>')) {
             videoHtml = videoHtml.replace('/>', '></video>');
           }
+          
+          // For mobile autoplay to work, we MUST have muted and playsInline
+          // If autoplay is present, ensure muted and playsInline are also present
+          const hasAutoplay = /autoplay/i.test(videoHtml);
+          if (hasAutoplay) {
+            // Ensure muted is present (required for autoplay on mobile)
+            if (!/muted/i.test(videoHtml)) {
+              videoHtml = videoHtml.replace('<video', '<video muted');
+            }
+            // Ensure playsinline is present (required for iOS autoplay)
+            if (!/playsinline/i.test(videoHtml)) {
+              videoHtml = videoHtml.replace('<video', '<video playsinline');
+            }
+          }
+          
           // Ensure the video has the style attribute if not present
           if (!videoHtml.includes('style=')) {
             videoHtml = videoHtml.replace('<video', '<video style="width:100%; border-radius:12px;"');
           }
+          
           // Use dangerouslySetInnerHTML to render the video tag
           return (
             <div 
@@ -316,7 +332,12 @@ export const CaseStudyMarkdown: React.FC<CaseStudyMarkdownProps> = ({ content })
       };
       
       // Handle boolean attributes correctly
-      if (autoplay !== undefined) videoProps.autoPlay = true;
+      if (autoplay !== undefined) {
+        videoProps.autoPlay = true;
+        // For mobile autoplay to work, MUST have muted and playsInline
+        videoProps.muted = true;
+        videoProps.playsInline = true;
+      }
       if (loop !== undefined) videoProps.loop = true;
       if (muted !== undefined) videoProps.muted = true;
       if (playsinline !== undefined) videoProps.playsInline = true;
