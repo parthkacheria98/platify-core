@@ -284,9 +284,11 @@ const Index = () => {
                 Upgrade my workflow!
               </Button>
             </Link>
-            <Button variant="outline" size="xl" className="w-full sm:w-auto">
-              How does it work?
-            </Button>
+            <Link to="/case-studies" className="w-full sm:w-auto">
+              <Button variant="outline" size="xl" className="w-full sm:w-auto">
+                Show me your work!
+              </Button>
+            </Link>
           </motion.div>
         </div>
       </section>

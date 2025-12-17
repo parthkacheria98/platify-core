@@ -24,11 +24,22 @@ const CaseStudies = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Fetch case studies from API
+    // Fetch case studies from API with timeout and caching
     const fetchCases = async () => {
       try {
         setLoading(true);
-        const response = await fetch('/api/case-studies?published=true');
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 10000); // 10s timeout
+        
+        const response = await fetch('/api/case-studies?published=true', {
+          signal: controller.signal,
+          headers: {
+            'Cache-Control': 'max-age=300' // Cache for 5 minutes
+          }
+        });
+        
+        clearTimeout(timeoutId);
+        
         if (!response.ok) {
           throw new Error('Failed to fetch case studies');
         }
@@ -39,7 +50,9 @@ const CaseStudies = () => {
           setCases([]);
         }
       } catch (error) {
-        console.error('Error fetching case studies:', error);
+        if (error instanceof Error && error.name !== 'AbortError') {
+          console.error('Error fetching case studies:', error);
+        }
         setCases([]);
       } finally {
         setLoading(false);
@@ -82,9 +95,9 @@ const CaseStudies = () => {
           ) : (
             cases.map((study, index) => (
               <article
-                key={study.id}
+                key={`${study.id}-${index}`}
                 className="animate-fade-in-up"
-                style={{ animationDelay: `${index * 0.15}s` }}
+                style={{ animationDelay: `${Math.min(index * 0.08, 0.5)}s` }}
               >
                 {/* If content field exists, render full markdown */}
                 {study.content ? (
@@ -144,7 +157,7 @@ const CaseStudies = () => {
                       <div className="md:col-span-4">
                         <div className="space-y-6">
                           <div>
-                            <div className="text-base text-muted-foreground mb-2">Client</div>
+                              <div className="text-base text-muted-foreground mb-2">Client</div>
                             <div className="font-light text-lg">{study.client}</div>
                           </div>
                           
