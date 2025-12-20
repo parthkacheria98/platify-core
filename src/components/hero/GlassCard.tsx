@@ -62,13 +62,15 @@ export const GlassCard: React.FC = () => {
               Start Building →
             </Button>
           </Link>
-          <Button
-            variant="outline"
-            size="xl"
-            className="w-full sm:w-auto min-w-[180px]"
-          >
-            Watch Demo
-          </Button>
+          <Link to="/case-studies" className="flex-1 sm:flex-initial">
+            <Button
+              variant="outline"
+              size="xl"
+              className="w-full sm:w-auto min-w-[180px]"
+            >
+              Explore
+            </Button>
+          </Link>
         </motion.div>
       </div>
     </motion.div>
