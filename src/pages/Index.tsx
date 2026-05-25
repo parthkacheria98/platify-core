@@ -73,11 +73,11 @@ const Index = () => {
 
   const buildTypes = [
     { name: "Complete Business Platforms", description: "Full-stack systems that power your entire operation" },
+    { name: "Cloud Integrations & Support", description: "AWS, Azure, GCP, Databricks, Snowflake, ClickHouse, ClickUp, Posthog, etc." },
     { name: "Internal Tools", description: "Custom dashboards and admin panels" },
     { name: "Beautiful Websites", description: "Modular and easy to edit" },
-    { name: "Client Portals", description: "White-label customer platforms" },
-    { name: "Vendor Portals", description: "Supplier collaboration systems" },
-    { name: "Analytics Dashboards", description: "Real-time insights and reporting" },
+    { name: "Client & Vendor Portals", description: "White-label customer and supplier platforms" },
+    { name: "Analytics Dashboards", description: "Real-time insights and reporting" }
   ];
 
   const testimonials = [

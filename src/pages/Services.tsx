@@ -11,6 +11,16 @@ const Services = () => {
       features: ["Bespoke engineering", "Zero compromises", "Built for your team"],
     },
     {
+      title: "Cloud Integrations & Infrastructure Support",
+      description: "We architect, integrate, and support the modern cloud stack your business runs on. From data platforms and analytics infrastructure to DevOps, automation, and enterprise tooling, we ensure your systems scale reliably and work together seamlessly.",
+      features: [
+        "AWS, Azure & Google Cloud Platform (GCP)",
+        "Databricks, Snowflake, ClickHouse & Apache Spark",
+        "Docker, Kubernetes, Airflow & Kafka",
+        "Infrastructure monitoring, deployment pipelines & ongoing support",
+      ],
+    },
+    {
       title: "Client & Vendor Portals",
       description: "Give your stakeholders access to what they need. Nothing more, nothing less. Beautiful, secure portals that enhance relationships and reduce back-and-forth.",
       features: ["Branded experience", "Secure access", "Real-time updates"],
@@ -25,6 +35,7 @@ const Services = () => {
       description: "We act as your analytics team and transform your data into clear, regular insights so you always know what is working, what is not, and where to focus next.",
       features: ["Fully automated businesss reporting", "Get to truly know your customers", "Get dashboards you will actually use"],
     }
+    
   ];
 
   return (
