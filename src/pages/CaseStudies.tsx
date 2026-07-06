@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import { CaseStudyMarkdown } from "@/components/CaseStudyMarkdown";
+import caseStudiesData from "@/data/caseStudies.json";
 
 interface CaseStudy {
   id: string;
@@ -24,42 +25,9 @@ const CaseStudies = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Fetch case studies from API with timeout and caching
-    const fetchCases = async () => {
-      try {
-        setLoading(true);
-        const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), 10000); // 10s timeout
-        
-        const response = await fetch('/api/case-studies?published=true', {
-          signal: controller.signal,
-          headers: {
-            'Cache-Control': 'max-age=300' // Cache for 5 minutes
-          }
-        });
-        
-        clearTimeout(timeoutId);
-        
-        if (!response.ok) {
-          throw new Error('Failed to fetch case studies');
-        }
-        const result = await response.json();
-        if (result.success && result.data) {
-          setCases(result.data);
-        } else {
-          setCases([]);
-        }
-      } catch (error) {
-        if (error instanceof Error && error.name !== 'AbortError') {
-          console.error('Error fetching case studies:', error);
-        }
-        setCases([]);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchCases();
+    const published = (caseStudiesData as CaseStudy[]).filter((c) => c.published);
+    setCases(published);
+    setLoading(false);
   }, []);
 
   return (

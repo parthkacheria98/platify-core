@@ -3,6 +3,7 @@ import { useParams, Link, useNavigate } from "react-router-dom";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import { CaseStudyMarkdown } from "@/components/CaseStudyMarkdown";
+import blogPostsData from "@/data/blogPosts.json";
 
 interface BlogPost {
   id: string;
@@ -23,35 +24,16 @@ const BlogPost = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Fetch post from API
-    const fetchPost = async () => {
-      try {
-        setLoading(true);
-        const response = await fetch(`/api/blog/posts/${slug}`);
-        if (!response.ok) {
-          if (response.status === 404) {
-            navigate("/blog");
-            return;
-          }
-          throw new Error('Failed to fetch blog post');
-        }
-        const result = await response.json();
-        if (result.success && result.data) {
-          setPost(result.data);
-        } else {
-          navigate("/blog");
-        }
-      } catch (error) {
-        console.error('Error fetching blog post:', error);
-        navigate("/blog");
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    if (slug) {
-      fetchPost();
+    if (!slug) return;
+    const found = (blogPostsData as BlogPost[]).find(
+      (p) => p.slug === slug && p.published
+    );
+    if (!found) {
+      navigate("/blog");
+      return;
     }
+    setPost(found);
+    setLoading(false);
   }, [slug, navigate]);
 
   if (loading) {
