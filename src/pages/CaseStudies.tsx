@@ -3,7 +3,6 @@ import { Link } from "react-router-dom";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import { CaseStudyMarkdown } from "@/components/CaseStudyMarkdown";
-import caseStudiesData from "@/data/caseStudies.json";
 
 interface CaseStudy {
   id: string;
@@ -25,9 +24,21 @@ const CaseStudies = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const published = (caseStudiesData as CaseStudy[]).filter((c) => c.published);
-    setCases(published);
-    setLoading(false);
+    const fetchCases = async () => {
+      try {
+        const response = await fetch('/api/case-studies');
+        if (!response.ok) throw new Error('Failed to fetch case studies');
+        const data: CaseStudy[] = await response.json();
+        const published = data.filter((c) => c.published);
+        setCases(published);
+      } catch (error) {
+        console.error('Error fetching case studies:', error);
+        setCases([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchCases();
   }, []);
 
   return (

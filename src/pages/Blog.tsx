@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
-import blogPostsData from "@/data/blogPosts.json";
 
 interface BlogPost {
   id: string;
@@ -21,11 +20,23 @@ const Blog = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const published = (blogPostsData as BlogPost[])
-      .filter((p) => p.published)
-      .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
-    setPosts(published);
-    setLoading(false);
+    const fetchPosts = async () => {
+      try {
+        const response = await fetch('/api/blog/posts');
+        if (!response.ok) throw new Error('Failed to fetch posts');
+        const data: BlogPost[] = await response.json();
+        const published = data
+          .filter((p) => p.published)
+          .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+        setPosts(published);
+      } catch (error) {
+        console.error('Error fetching blog posts:', error);
+        setPosts([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchPosts();
   }, []);
 
   return (
